@@ -168,45 +168,45 @@ const Card = () => {
             <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone === true ? `border-green-500` : `border-red-500`}`}></div>
 
             <div className="rounded-b-lg bg-common shadow-md py-2 px-2 md:py-3 md:px-4">
-                <div className="m-2 flex justify-between">
+                <div className="m-2 flex justify-between gap-x-10">
                     <div className="flex flex-col justify-between gap-y-2 w-full">
-                        <div className="flex gap-x-2">
-                            <h1 className="text-gray-600">Seller:</h1>
+                        <div className="flex gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Seller:</h1>
                             {
                                 ViewEdit ?
                                     <input
-                                        className="px-3 py-1 rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
                                         type="text"
                                         name="seller"
                                         value={values.seller}
                                         onChange={handleChange}
                                     />
                                     :
-                                    <h1 className="font-semibold">{formData.seller}</h1>
+                                    <h1 className="font-semibold text-xs sm:text-base">{formData.seller}</h1>
                             }
                         </div>
-                        <div className="flex gap-x-2">
-                            <h1 className="text-gray-600">Buyer:</h1>
+                        <div className="flex gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Buyer:</h1>
                             {
                                 ViewEdit ?
                                     <input
-                                        className="px-3 py-1 rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
                                         type="text"
                                         name="buyer"
                                         value={values.buyer}
                                         onChange={handleChange}
                                     />
                                     :
-                                    <h1 className="font-semibold">{formData.buyer}</h1>
+                                    <h1 className="font-semibold text-xs sm:text-base">{formData.buyer}</h1>
                             }
                         </div>
                         {
                             !ViewEdit ?
-                                <div className="flex gap-x-2 w-1/2 items-center">
-                                    <h1 className="text-gray-600">Pending Amount:</h1>
+                                <div className="flex gap-x-2 w-full items-center">
+                                    <h1 className="text-gray-600 text-xs sm:text-base">Pending Amount:</h1>
                                     <div className=" flex gap-x-2 items-center">
-                                        <h1 className="font-extrabold font-heading tracking-wider text-red-700">{values.pendingAmount}</h1>
-                                        <h1 className="text-gray-600">₹</h1>
+                                        <h1 className="font-extrabold font-heading sm:tracking-wider text-red-700 text-xs sm:text-base">{values.pendingAmount}</h1>
+                                        <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                                     </div>
                                 </div>
                                 : <></>
@@ -215,20 +215,20 @@ const Card = () => {
                     <div className="cursor-pointer" >
                         {
                             ViewEdit ?
-                                <FaTimes className="w-5 h-5 opacity-60" onClick={CancelEdit} />
+                                <FaTimes className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={CancelEdit} />
                                 :
-                                <FaEdit className="w-5 h-5 opacity-60" onClick={() => setViewEdit(true)} />
+                                <FaEdit className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={() => setViewEdit(true)} />
                         }
                     </div>
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 lg:gap-x-10">
-                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Selling Date:</h1>
+                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-x-1 md:gap-x-5 lg:gap-x-10">
+                    <div className="flex flex-col lg:flex-row w-2/6 md:w-1/3 md:gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Selling Date:</h1>
                         {
                             ViewEdit ?
                                 <input
-                                    className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="date"
                                     name="sellingDate"
                                     value={values.sellingDate}
@@ -236,15 +236,15 @@ const Card = () => {
                                     onChange={handleChange}
                                 />
                                 :
-                                <h1 className="font-semibold">{formData.sellingDate}</h1>
+                                <h1 className="font-semibold text-xs sm:text-base">{formData.sellingDate}</h1>
                         }
                     </div>
-                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Due Date:</h1>
+                    <div className="flex flex-col lg:flex-row w-2/6 md:w-1/3 gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Due Date:</h1>
                         {
                             ViewEdit ?
                                 <input
-                                    className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="date"
                                     name="dueDate"
                                     value={values.dueDate}
@@ -252,15 +252,15 @@ const Card = () => {
                                     onChange={handleChange}
                                 />
                                 :
-                                <h1 className="font-semibold">{formData.dueDate}</h1>
+                                <h1 className="font-semibold text-xs sm:text-base">{formData.dueDate}</h1>
                         }
                     </div>
-                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Due Day:</h1>
+                    <div className="flex flex-col lg:flex-row w-2/6 md:w-1/3 gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Due Day:</h1>
                         {
                             ViewEdit ?
                                 <input
-                                    className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="text"
                                     name="dueDay"
                                     value={values.dueDay}
@@ -268,55 +268,55 @@ const Card = () => {
                                     disabled
                                 />
                                 :
-                                <h1 className="font-semibold">{formData.dueDay}</h1>
+                                <h1 className="font-semibold text-xs sm:text-base">{formData.dueDay}</h1>
                         }
                     </div>
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-y-2 lg:gap-x-10">
+                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-y-2 gap-x-1 md:gap-x-5 lg:gap-x-10">
                     <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Weight:</h1>
-                        <div className="flex gap-x-2 items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Weight:</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
                             {
                                 ViewEdit ?
                                     <input
-                                        className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                         type="text"
                                         name="weight"
                                         value={values.weight}
                                         onChange={handleChange}
                                     />
                                     :
-                                    <h1 className="font-semibold">{formData.weight}</h1>
+                                    <h1 className="font-semibold text-xs sm:text-base">{formData.weight}</h1>
                             }
-                            <h1 className="text-gray-600">kg</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Out(%):</h1>
-                        <div className="flex gap-x-2 items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Out(%):</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
                             {
                                 ViewEdit ?
                                     <input
-                                        className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                         type="text"
                                         name="outPercentage"
                                         value={values.outPercentage}
                                         onChange={handleChange}
                                     />
                                     :
-                                    <h1 className="font-semibold">{formData.outPercentage}</h1>
+                                    <h1 className="font-semibold text-xs sm:text-base">{formData.outPercentage}</h1>
                             }
-                            <h1 className="text-gray-600">%</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
-                        <h1 className="text-gray-600">Out Weight:</h1>
-                        <div className="flex gap-x-2 items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Out Weight:</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
                             {
                                 ViewEdit ?
                                     <input
-                                        className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                         type="text"
                                         name="outWeight"
                                         value={values.outWeight}
@@ -324,22 +324,22 @@ const Card = () => {
                                         disabled
                                     />
                                     :
-                                    <h1 className="font-semibold">{formData.outWeight}</h1>
+                                    <h1 className="font-semibold text-xs sm:text-base">{formData.outWeight}</h1>
                             }
-                            <h1 className="text-gray-600">kg</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                         </div>
                     </div>
                 </div>
 
                 <div className="m-2 border-t-2 border-brown pt-3 gap-y-2">
-                    <div className="flex justify-between flex-row gap-x-10 mb-1">
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Net Weight:</h1>
-                            <div className="flex gap-x-2 items-center">
+                    <div className="flex flex-row gap-x-1 md:gap-x-5 lg:gap-x-10 mb-1">
+                        <div className="flex flex-col lg:flex-row w-1/3 text-center gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Net Weight:</h1>
+                            <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="netWeight"
                                             value={values.netWeight}
@@ -347,56 +347,57 @@ const Card = () => {
                                             disabled
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.netWeight}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.netWeight}</h1>
                                 }
-                                <h1 className="text-gray-600">kg</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                             </div>
                         </div>
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Price:</h1>
-                            <div className=" flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Price:</h1>
+                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="price"
                                             value={values.price}
                                             onChange={handleChange}
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.price}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.price}</h1>
                                 }
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Less(%):</h1>
-                            <div className=" flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Less(%):</h1>
+                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="lessPercentage"
                                             value={values.lessPercentage}
                                             onChange={handleChange}
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.lessPercentage}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.lessPercentage}</h1>
                                 }
-                                <h1 className="text-gray-600">%</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-between flex-row gap-x-10 mb-1 pb-3">
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Total Amount:</h1>
-                            <div className=" flex gap-x-2 items-center">
+                    <div className="flex justify-between flex-row gap-x-1 md:gap-x-5 lg:gap-x-10 mb-1 pb-3">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs hidden sm:block sm:text-base">Total Amount:</h1>
+                            <h1 className="text-gray-600 text-xs block sm:hidden sm:text-base">Total Amt:</h1>
+                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="totalAmount"
                                             value={values.totalAmount}
@@ -404,18 +405,18 @@ const Card = () => {
                                             disabled
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.totalAmount}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.totalAmount}</h1>
                                 }
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Brokerage:</h1>
-                            <div className=" flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Brokerage:</h1>
+                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="brokerage"
                                             value={values.brokerage}
@@ -423,18 +424,19 @@ const Card = () => {
                                             onChange={handleChange}
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.brokerage}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.brokerage}</h1>
                                 }
-                                <h1 className="text-gray-600">%</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                             </div>
                         </div>
-                        <div className="flex flex-col lg:flex-row text-center w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Brokerage Amt:</h1>
-                            <div className=" flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs hidden sm:block sm:text-base">Brokerage Amt:</h1>
+                            <h1 className="text-gray-600 text-xs block sm:hidden">Brok Amt:</h1>
+                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
-                                            className="px-3 w-full py-1 rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="text"
                                             name="brokerageAmt"
                                             value={values.brokerageAmt}
@@ -442,9 +444,9 @@ const Card = () => {
                                             disabled
                                         />
                                         :
-                                        <h1 className="font-semibold">{formData.brokerageAmt}</h1>
+                                        <h1 className="font-semibold text-xs sm:text-base">{formData.brokerageAmt}</h1>
                                 }
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
                     </div>
@@ -452,20 +454,20 @@ const Card = () => {
 
                 {
                     ViewEdit ?
-                        <div className="m-2 border-2 flex flex-col border-brown rounded-md p-3 gap-y-6">
-                            <div className="flex gap-x-2 w-1/2 items-center">
-                                <h1 className="text-gray-600">Pending Amount:</h1>
-                                <div className=" flex gap-x-2 items-center">
-                                    <h1 className="font-semibold">{values.pendingAmount}</h1>
-                                    <h1 className="text-gray-600">₹</h1>
+                        <div className="m-2 border-2 flex flex-col border-brown rounded-md p-3 gap-y-3 md:gap-y-6">
+                            <div className="flex gap-x-2 w-full items-center">
+                                <h1 className="text-gray-600 text-xs sm:text-base">Pending Amount:</h1>
+                                <div className=" flex gap-x-1 sm:gap-x-2 items-center">
+                                    <h1 className="font-semibold text-xs sm:text-base">{values.pendingAmount}</h1>
+                                    <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                                 </div>
                             </div>
                             <div className="flex gap-x-2 justify-between items-center">
-                                <div className="flex gap-x-2 w-1/2 items-center">
-                                    <h1 className="text-gray-600">Paid Amount:</h1>
-                                    <div className="flex gap-x-2 items-center">
+                                <div className="flex flex-col lg:flex-row gap-x-2 w-1/2 items-center justify-center">
+                                    <h1 className="text-gray-600 text-xs sm:text-base">Paid Amount:</h1>
+                                    <div className="flex gap-x-2 items-center justify-center">
                                         <input
-                                            className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                                            className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                             type="number"
                                             name="paidAmount"
                                             value={values.paidAmount}
@@ -474,10 +476,10 @@ const Card = () => {
                                         <h1 className="text-gray-600">₹</h1>
                                     </div>
                                 </div>
-                                <div className="flex gap-x-2 w-1/2 items-center">
-                                    <h1 className="text-gray-600">Paid Date:</h1>
+                                <div className="flex flex-col lg:flex-row gap-x-2 w-1/2 items-center justify-center">
+                                    <h1 className="text-gray-600 text-xs sm:text-base">Paid Date:</h1>
                                     <input
-                                        className="px-3 py-1 rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                         type="date"
                                         name="paidDate"
                                         value={values.paidDate}
@@ -488,14 +490,14 @@ const Card = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col gap-x-2">
-                                <h1 className="text-gray-600">Payment Details:</h1>
-                                <div className="p-3 bg-slate-50 max-h-40 overflow-y-scroll focus-within:border-blue-500 rounded-md">
+                                <h1 className="text-gray-600 text-xs sm:text-base">Payment Details:</h1>
+                                <div className="flex flex-col gap-y-2 p-3 bg-slate-50 max-h-40 overflow-y-scroll rounded-md">
                                     {
                                         values.paymentRemarks.length > 0 &&
                                         values.paymentRemarks.map((ele, ind) => {
-                                            return <div key={ind} className="flex justify-between">
-                                                <h1>({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
-                                                <FaTrash className="cursor-pointer" onClick={() => DeletePaymentEntry(ind)} />
+                                            return <div key={ind} className="flex gap-x-1 sm:gap-x-2 justify-between">
+                                                <h1 className="text-xs sm:text-base">({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
+                                                <FaTrash className="cursor-pointer opacity-70" onClick={() => DeletePaymentEntry(ind)} />
                                             </div>
                                         })
                                     }
@@ -527,7 +529,7 @@ const Card = () => {
                         <></>
                 }
             </div>
-        </div>
+        </div >
     );
 };
 
