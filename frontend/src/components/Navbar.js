@@ -6,9 +6,9 @@ import { FaRegUser, FaSignOutAlt } from "react-icons/fa";
 const Navbar = () => {
 
   return (
-    <div className="flex shadow-lg flex-row justify-between my-6 mx-auto py-4 px-5 lg:py-7 lg:px-20 md:py-5 md:px-10 bg-brown items-center rounded-t-xl">
+    <div className="flex shadow-lg flex-row justify-between mb-6 sm:mb-6 sm:mt-6 mx-auto py-4 px-5 lg:py-7 lg:px-20 md:py-5 md:px-10 bg-brown items-center sm:rounded-t-xl">
       <div className="flex">
-        <Link href="/" className="cursor-pointer hover:scale-105 duration-150 text-xl sm:text-3xl lg:text-5xl md:text-4xl font-300 sm:tracking-wide text-blue font-rare">
+        <Link href="/" className="cursor-pointer hover:scale-105 duration-150 text-2xl sm:text-3xl lg:text-5xl md:text-4xl font-300 sm:tracking-wide text-blue font-rare">
           Brocker Diary
         </Link>
       </div>

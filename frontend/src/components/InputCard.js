@@ -283,9 +283,9 @@ const InputCard = ({ setInputCard }) => {
                     </div>
                 </div>
 
-                <div className="m-2 mt-4 flex gap-x-6 cursor-pointer">
-                    <div className="px-2 py-2 rounded-lg text-common text-xl tracking-wider text-center bg-blue w-1/4" onClick={SaveEdit}>Save</div>
-                    <div className="px-2 py-2 rounded-lg text-common text-xl tracking-wider text-center bg-blue w-1/4" onClick={() => setInputCard(false)}>Cancel</div>
+                <div className="m-2 mt-4 flex gap-x-3 sm:gap-x-6 cursor-pointer sm:w-1/2">
+                    <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>Save</div>
+                    <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={() => setInputCard(false)}>Cancel</div>
                 </div>
             </div>
         </div>

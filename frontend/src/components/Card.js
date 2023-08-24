@@ -167,10 +167,10 @@ const Card = () => {
         <div>
             <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone === true ? `border-green-500` : `border-red-500`}`}></div>
 
-            <div className="rounded-b-lg bg-common shadow-md py-2 px-2 md:py-3 md:px-4">
+            <div className="rounded-b-lg bg-common shadow-md pt-2 px-2 md:py-3 md:px-4">
                 <div className="m-2 flex justify-between gap-x-10">
                     <div className="flex flex-col justify-between gap-y-2 w-full">
-                        <div className="flex gap-x-2 items-center">
+                        <div className="flex gap-x-1 sm:gap-x-2 items-center">
                             <h1 className="text-gray-600 text-xs sm:text-base">Seller:</h1>
                             {
                                 ViewEdit ?
@@ -185,7 +185,7 @@ const Card = () => {
                                     <h1 className="font-semibold text-xs sm:text-base">{formData.seller}</h1>
                             }
                         </div>
-                        <div className="flex gap-x-2 items-center">
+                        <div className="flex gap-x-1 sm:gap-x-2 items-center">
                             <h1 className="text-gray-600 text-xs sm:text-base">Buyer:</h1>
                             {
                                 ViewEdit ?
@@ -202,7 +202,7 @@ const Card = () => {
                         </div>
                         {
                             !ViewEdit ?
-                                <div className="flex gap-x-2 w-full items-center">
+                                <div className="flex gap-x-1 sm:gap-x-2 w-full items-center">
                                     <h1 className="text-gray-600 text-xs sm:text-base">Pending Amount:</h1>
                                     <div className=" flex gap-x-2 items-center">
                                         <h1 className="font-extrabold font-heading sm:tracking-wider text-red-700 text-xs sm:text-base">{values.pendingAmount}</h1>
@@ -222,7 +222,7 @@ const Card = () => {
                     </div>
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-x-1 md:gap-x-5 lg:gap-x-10">
+                <div className="m-2 flex justify-between border-t-2 border-brown pt-2 sm:pt-3 gap-x-1 md:gap-x-5 lg:gap-x-10">
                     <div className="flex flex-col lg:flex-row w-2/6 md:w-1/3 md:gap-x-2 text-center items-center">
                         <h1 className="text-gray-600 text-xs sm:text-base">Selling Date:</h1>
                         {
@@ -273,7 +273,7 @@ const Card = () => {
                     </div>
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-y-2 gap-x-1 md:gap-x-5 lg:gap-x-10">
+                <div className="m-2 flex justify-between border-t-2 border-brown pt-2 sm:pt-3 gap-y-2 gap-x-1 md:gap-x-5 lg:gap-x-10">
                     <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
                         <h1 className="text-gray-600 text-xs sm:text-base">Weight:</h1>
                         <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
@@ -331,7 +331,7 @@ const Card = () => {
                     </div>
                 </div>
 
-                <div className="m-2 border-t-2 border-brown pt-3 gap-y-2">
+                <div className="m-2 border-t-2 border-brown pt-2 sm:pt-3 gap-y-2">
                     <div className="flex flex-row gap-x-1 md:gap-x-5 lg:gap-x-10 mb-1">
                         <div className="flex flex-col lg:flex-row w-1/3 text-center gap-x-2 items-center">
                             <h1 className="text-gray-600 text-xs sm:text-base">Net Weight:</h1>
@@ -473,7 +473,7 @@ const Card = () => {
                                             value={values.paidAmount}
                                             onChange={handleChange}
                                         />
-                                        <h1 className="text-gray-600">₹</h1>
+                                        <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                                     </div>
                                 </div>
                                 <div className="flex flex-col lg:flex-row gap-x-2 w-1/2 items-center justify-center">
@@ -495,9 +495,9 @@ const Card = () => {
                                     {
                                         values.paymentRemarks.length > 0 &&
                                         values.paymentRemarks.map((ele, ind) => {
-                                            return <div key={ind} className="flex gap-x-1 sm:gap-x-2 justify-between">
-                                                <h1 className="text-xs sm:text-base">({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
-                                                <FaTrash className="cursor-pointer opacity-70" onClick={() => DeletePaymentEntry(ind)} />
+                                            return <div key={ind} className="flex items-center gap-x-2">
+                                                <h1 className="text-xs sm:text-base w-full">({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
+                                                <FaTrash className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer opacity-70" onClick={() => DeletePaymentEntry(ind)} />
                                             </div>
                                         })
                                     }
@@ -521,9 +521,9 @@ const Card = () => {
 
                 {
                     ViewEdit ?
-                        <div className="m-2 mt-4 flex gap-x-6 cursor-pointer">
-                            <div className="px-2 py-2 rounded-lg text-common text-xl tracking-wider text-center bg-blue w-1/4" onClick={SaveEdit}>Save</div>
-                            <div className="px-2 py-2 rounded-lg text-common text-xl tracking-wider text-center bg-blue w-1/4" onClick={CancelEdit}>Cancel</div>
+                        <div className="m-2 mt-4 flex gap-x-3 sm:gap-x-6 cursor-pointer sm:w-1/2">
+                            <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>Save</div>
+                            <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={CancelEdit}>Cancel</div>
                         </div>
                         :
                         <></>
