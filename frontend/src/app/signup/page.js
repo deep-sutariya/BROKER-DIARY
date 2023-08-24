@@ -34,29 +34,29 @@ const page = () => {
     }
     return (
         <div className="flex justify-center items-center rounded-xl h-[70vh]">
-            <div className="bg-common p-10 rounded-md shadow-md w-[60%]">
-                <h2 className="text-3xl font-bold mb-10 font-heading">Signup</h2>
-                <form className="flex flex-col gap-y-8 form-input" onSubmit={handleSubmit}>
-                    <div className="flex gap-x-10 w-full">
-                        <div className="flex flex-col gap-y-4 w-1/2">
+            <div className="bg-common p-7 md:p-10 rounded-md shadow-md w-[85%] sm:w-[77%] md:w-[65%] lg:w-[60%] bg-gradient-to-br from-brown to-common">
+                <h2 className="text-xl sm:text-3xl font-bold mb-8 font-heading">Signup</h2>
+                <form className="flex flex-col gap-y-6 form-input" onSubmit={handleSubmit}>
+                    <div className="flex flex-col md:flex-row gap-y-4 gap-x-10 w-full">
+                        <div className="flex flex-col gap-y-4 md:w-1/2">
                             <div className="gap-y-2">
-                                <label htmlFor="fullname" className="font-medium text-gray-700">Full Name</label>
-                                <input type="text" id="fullname" name="fullname" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
+                                <label htmlFor="fullname" className="font-medium text-base md:text-lg text-gray-700">Full Name</label>
+                                <input type="text" id="fullname" placeholder="Enter Name" name="fullname" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
                             </div>
                             <div className="gap-y-2">
-                                <label htmlFor="email" className="font-medium text-gray-700">Email</label>
-                                <input id="email" name="email" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
+                                <label htmlFor="email" className="font-medium text-base md:text-lg text-gray-700">Email</label>
+                                <input id="email" name="email" placeholder="abc@gmail.com" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-y-4 w-1/2">
+                        <div className="flex flex-col gap-y-4 md:w-1/2">
                             <div className="gap-y-2">
-                                <label htmlFor="password" className="font-medium text-gray-700">Password</label>
-                                <input type="password" id="password" name="password" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
+                                <label htmlFor="password" className="font-medium text-base md:text-lg text-gray-700">Password</label>
+                                <input type="password" id="password" placeholder="Create Password" name="password" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
                             </div>
                             <div className="gap-y-2">
-                                <label htmlFor="cpassword" className="font-medium text-gray-700">Confirm Password</label>
-                                <input type="password" id="cpassword" name="cpassword" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
+                                <label htmlFor="cpassword" className="font-medium text-base md:text-lg text-gray-700">Confirm Password</label>
+                                <input type="password" id="cpassword" placeholder="Re-enter Password" name="cpassword" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
                             </div>
                         </div>
 

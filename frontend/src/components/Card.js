@@ -167,7 +167,7 @@ const Card = () => {
         <div>
             <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone === true ? `border-green-500` : `border-red-500`}`}></div>
 
-            <div className="rounded-b-lg bg-common shadow-md pt-2 px-2 md:py-3 md:px-4">
+            <div className="rounded-b-lg bg-common shadow-md py-2 px-2 md:py-3 md:px-4">
                 <div className="m-2 flex justify-between gap-x-10">
                     <div className="flex flex-col justify-between gap-y-2 w-full">
                         <div className="flex gap-x-1 sm:gap-x-2 items-center">
@@ -175,7 +175,7 @@ const Card = () => {
                             {
                                 ViewEdit ?
                                     <input
-                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full lg:w-1/2 rounded-md focus:outline-none"
                                         type="text"
                                         name="seller"
                                         value={values.seller}
@@ -190,7 +190,7 @@ const Card = () => {
                             {
                                 ViewEdit ?
                                     <input
-                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
+                                        className="text-xs sm:text-base px-1 py-1 md:px-3 md:py-1 w-full lg:w-1/2 rounded-md focus:outline-none"
                                         type="text"
                                         name="buyer"
                                         value={values.buyer}
@@ -354,7 +354,7 @@ const Card = () => {
                         </div>
                         <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
                             <h1 className="text-gray-600 text-xs sm:text-base">Price:</h1>
-                            <div className=" flex gap-x-1 md:gap-x-2 items-center justify-center">
+                            <div className="flex gap-x-1 md:gap-x-2 items-center justify-center">
                                 {
                                     ViewEdit ?
                                         <input
@@ -512,7 +512,7 @@ const Card = () => {
                                     checked={values.fullpaymentDone}
                                     onChange={checkBoxHandler}
                                 />
-                                <h1 className="text-gray-600">Full Payment Done</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">Full Payment Done</h1>
                             </div>
                         </div>
                         :

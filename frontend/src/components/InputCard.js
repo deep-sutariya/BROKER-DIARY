@@ -33,7 +33,7 @@ const InputCard = ({ setInputCard }) => {
         const validationResponse = CheckCardInput(values);
         if (validationResponse === "Success") {
             // SaveCard Axios Request
-            // setInputCard(false);
+            setInputCard(false);
         }
         alert(validationResponse)
     }
@@ -79,44 +79,46 @@ const InputCard = ({ setInputCard }) => {
 
     return (
         <div>
-            <div className="rounded-lg bg-popup shadow-md py-6 px-4">
-                <div className="flex mb-8 justify-between items-center">
-                    <h2 className="text-3xl font-bold font-heading text-blue tracking-wider">Input Card</h2>
+            <div className="rounded-lg bg-popup shadow-2xl py-5 px-4">
+                <div className="sm:m-2 flex mb-8 justify-between items-center">
+                    <h2 className="text-2xl sm:text-3xl font-bold font-heading text-blue sm:tracking-wider">Input Card</h2>
                     <div className="cursor-pointer" onClick={() => setInputCard(false)}>
-                        <FaTimes className="w-5 h-5 opacity-60" />
+                        <FaTimes className="w-4 h-4 md:w-5 md:h-5 opacity-60" />
                     </div>
                 </div>
-                <div className="m-2 flex justify-between">
-                    <div className="flex flex-col justify-between gap-y-2">
-                        <div className="flex gap-x-2">
-                            <h1 className="text-gray-600">Seller:</h1>
+                <div className="sm:mb-2 sm:mx-2 mb-3 sm:mt-8 flex justify-between">
+                    <div className="flex flex-col justify-between gap-y-2 w-full">
+                        <div className="flex gap-x-1 sm:gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Seller:</h1>
                             <input
-                                className="px-3 py-1 rounded-md focus:outline-none"
+                                className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-full lg:w-1/2 rounded-md focus:outline-none"
                                 type="text"
                                 name="seller"
                                 value={values.seller}
                                 onChange={handleChange}
+                                placeholder="Seller Name"
                             />
                         </div>
-                        <div className="flex gap-x-2">
-                            <h1 className="text-gray-600">Buyer:</h1>
+                        <div className="flex gap-x-1 sm:gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Buyer:</h1>
                             <input
-                                className="px-3 py-1 rounded-md focus:outline-none"
+                                className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-full lg:w-1/2 rounded-md focus:outline-none"
                                 type="text"
                                 name="buyer"
                                 value={values.buyer}
                                 onChange={handleChange}
+                                placeholder="Buyer Name"
                             />
                         </div>
                     </div>
 
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-y-2 gap-x-10">
-                    <div className="flex w-1/3 items-center">
-                        <h1 className="text-gray-600 w-1/2">Selling Date:</h1>
+                <div className="sm:m-2 mb-3 flex justify-between border-t-2 border-brown pt-3 gap-x-3 md:gap-x-5 lg:gap-x-10">
+                    <div className="flex flex-col lg:flex-row w-1/3 md:gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base ">Selling Date:</h1>
                         <input
-                            className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                            className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
                             type="date"
                             name="sellingDate"
                             value={values.sellingDate}
@@ -124,10 +126,10 @@ const InputCard = ({ setInputCard }) => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="flex w-1/3 gap-x-2 items-center">
-                        <h1 className="text-gray-600 w-1/2">Due Date:</h1>
+                    <div className="flex flex-col lg:flex-row w-1/3 md:gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base ">Due Date:</h1>
                         <input
-                            className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                            className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
                             type="date"
                             name="dueDate"
                             value={values.dueDate}
@@ -135,10 +137,10 @@ const InputCard = ({ setInputCard }) => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="flex w-1/3 gap-x-2 items-center">
-                        <h1 className="text-gray-600 w-1/2">Due Day:</h1>
+                    <div className="flex flex-col lg:flex-row w-1/3 md:gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base ">Due Day:</h1>
                         <input
-                            className="px-3 py-1 w-1/2 rounded-md focus:outline-none"
+                            className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-full rounded-md focus:outline-none"
                             type="number"
                             name="dueDay"
                             value={values.dueDay}
@@ -148,144 +150,149 @@ const InputCard = ({ setInputCard }) => {
                     </div>
                 </div>
 
-                <div className="m-2 flex justify-between border-t-2 border-brown pt-3 gap-y-2 gap-x-10">
-                    <div className="flex w-1/3 gap-x-2 items-center">
-                        <h1 className="text-gray-600 w-1/2">Weight:</h1>
-                        <div className="w-1/2 flex gap-x-2 items-center">
+                <div className="sm:m-2 mb-3 flex justify-between border-t-2 border-brown pt-3 gap-x-1 md:gap-x-5 lg:gap-x-10">
+                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base">Weight:</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center w-full">
                             <input
-                                className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                 type="number"
                                 name="weight"
                                 value={values.weight}
                                 onChange={handleChange}
+                                placeholder="Weight"
                             />
-                            <h1 className="text-gray-600">kg</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                         </div>
                     </div>
-                    <div className="flex w-1/3 gap-x-2 items-center">
-                        <h1 className="text-gray-600 w-1/2">Out(%):</h1>
-                        <div className="w-1/2 flex gap-x-2 items-center">
+                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base ">Out(%):</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center w-full">
                             <input
-                                className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                 type="number"
                                 name="outPercentage"
                                 value={values.outPercentage}
                                 onChange={handleChange}
+                                placeholder="Out(%)"
                             />
-                            <h1 className="text-gray-600">%</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                         </div>
                     </div>
-                    <div className="flex w-1/3 gap-x-2 items-center">
-                        <h1 className="text-gray-600 w-1/2">Out Weight:</h1>
-                        <div className="w-1/2 flex gap-x-2 items-center">
+                    <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 text-center items-center">
+                        <h1 className="text-gray-600 text-xs sm:text-base ">Out Weight:</h1>
+                        <div className="flex gap-x-1 md:gap-x-2 items-center justify-center w-full">
                             <input
-                                className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                 type="number"
                                 name="outWeight"
                                 value={values.outWeight}
                                 onChange={handleChange}
                                 disabled
                             />
-                            <h1 className="text-gray-600">kg</h1>
+                            <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                         </div>
                     </div>
                 </div>
 
-                <div className="m-2 border-t-2 border-brown pt-3 gap-y-2">
-                    <div className="flex justify-between flex-row gap-x-10 mb-1">
-                        <div className="flex w-1/3 gap-x-2  items-center">
-                            <h1 className="text-gray-600 w-1/2">Net Weight:</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                <div className="sm:m-2 border-t-2 border-brown pt-3 flex flex-col gap-y-2">
+                    <div className="flex flex-row gap-x-1 md:gap-x-5 lg:gap-x-10 mb-1">
+                        <div className="flex flex-col lg:flex-row w-1/3 text-center gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Net Weight:</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="netWeight"
                                     value={values.netWeight}
                                     onChange={handleChange}
                                     disabled
                                 />
-                                <h1 className="text-gray-600">kg</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">kg</h1>
                             </div>
                         </div>
-                        <div className="flex w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Price:</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 text-center gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Price:</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="price"
                                     value={values.price}
                                     onChange={handleChange}
                                     max={100}
                                     min={0}
+                                    placeholder="Price"
                                 />
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
-                        <div className="flex w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Less(%):</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Less(%):</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="lessPercentage"
                                     value={values.lessPercentage}
                                     onChange={handleChange}
-                                    max={100}
-                                    min={0}
+                                    placeholder="Less(%)"
                                 />
-                                <h1 className="text-gray-600">%</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-between flex-row gap-x-10 mb-1 pb-3">
-                        <div className="flex w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Total Amount:</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                    <div className="flex flex-row gap-x-1 md:gap-x-5 lg:gap-x-10 mb-1">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs hidden sm:block sm:text-base">Total Amount:</h1>
+                            <h1 className="text-gray-600 text-xs block sm:hidden sm:text-base">Total Amt:</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="totalAmount"
                                     value={values.totalAmount}
                                     onChange={handleChange}
                                     disabled
                                 />
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
-                        <div className="flex w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Brokerage:</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs sm:text-base">Brokerage:</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 py-1 w-full rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="brokerage"
                                     value={values.brokerage}
                                     onChange={handleChange}
+                                    
                                 />
-                                <h1 className="text-gray-600">%</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                             </div>
                         </div>
-                        <div className="flex w-1/3 gap-x-2 items-center">
-                            <h1 className="text-gray-600 w-1/2">Brokerage Amt:</h1>
-                            <div className="w-1/2 flex gap-x-2 items-center">
+                        <div className="flex flex-col lg:flex-row w-1/3 gap-x-2 items-center">
+                            <h1 className="text-gray-600 text-xs hidden sm:block sm:text-base">Brokerage Amt:</h1>
+                            <h1 className="text-gray-600 text-xs block sm:hidden">Brok Amt:</h1>
+                            <div className="flex gap-x-1 w-full md:gap-x-2 items-center justify-center">
                                 <input
-                                    className="px-3 w-full py-1 rounded-md focus:outline-none"
+                                    className="text-xs sm:text-base px-2 py-1 md:px-3 md:py-1 w-4/6 sm:w-full rounded-md focus:outline-none"
                                     type="number"
                                     name="brokerageAmt"
                                     value={values.brokerageAmt}
                                     onChange={handleChange}
                                     disabled
                                 />
-                                <h1 className="text-gray-600">₹</h1>
+                                <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="m-2 mt-4 flex gap-x-3 sm:gap-x-6 cursor-pointer sm:w-1/2">
-                    <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>Save</div>
-                    <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={() => setInputCard(false)}>Cancel</div>
+                <div className="m-2 mt-6 sm:mt-4 flex gap-x-3 sm:gap-x-6 cursor-pointer sm:w-1/2">
+                    <div className="px-1 py-1 md:py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>Save</div>
+                    <div className="px-1 py-1 md:py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={() => setInputCard(false)}>Cancel</div>
                 </div>
             </div>
         </div>
