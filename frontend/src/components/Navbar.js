@@ -27,15 +27,15 @@ const Navbar = () => {
           </div> */}
 
         <div className="flex gap-x-4 md:gap-x-6 lg:gap-x-8 items-center" >
-          <div className="flex hover:scale-110 duration-150 gap-x-1 md:gap-x-2 items-center justify-center cursor-pointer ">
-            <FaLock className="w-3 h-4 lg:w-5 lg:h-5 md:w-4 md:h-4 text-common cursor-pointer" />
-            <Link href="login" className="cursor-pointer text-xl font-heading text-offwhite">
+          <div className="hover:scale-110 duration-150 cursor-pointer ">
+            <Link href="login" className="flex gap-x-1 md:gap-x-2 cursor-pointer text-xl font-heading text-offwhite justify-center items-center">
+              <FaLock className="w-3 h-4 lg:w-5 lg:h-5 md:w-4 md:h-4 text-common cursor-pointer" />
               <p className="text-heading text-offwhite text-xs sm:text-base lg:text-xl md:text-lg">Login</p>
             </Link>
           </div>
-          <div className="flex gap-x-1 md:gap-x-2 hover:scale-110 duration-150 items-center justify-center cursor-pointer ">
-            <FaUserPlus className="w-3 h-4 lg:w-5 lg:h-5 md:w-4 md:h-4 text-common cursor-pointer" />
-            <Link href="signup" className="cursor-pointer text-xl font-heading text-offwhite">
+          <div className=" hover:scale-110 duration-150 cursor-pointer ">
+            <Link href="signup" className="flex gap-x-1 md:gap-x-2 cursor-pointer text-xl font-heading text-offwhite justify-center items-center">
+              <FaUserPlus className="w-3 h-4 lg:w-5 lg:h-5 md:w-4 md:h-4 text-common cursor-pointer" />
               <p className="text-heading text-offwhite text-xs sm:text-base lg:text-xl md:text-lg">Signup</p>
             </Link>
           </div>

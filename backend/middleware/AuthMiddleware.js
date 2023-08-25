@@ -1,19 +1,18 @@
 const jwt = require('jsonwebtoken');
+const UserInfo = require('../models/UserInfo');
 
 const AuthMiddleware = async (req, res, next) => {
-    try{
-        console.log(req.body.token);
-        if(req.body.token.length > 0){
-            try{
-                console.log(jwt.verify(token,process.env.TOCKEN_PRIVATE_KEY));
-            }
-            catch(e){
-                console.log("E->",e);
-            }
+    try {
+        if (req.body.token && req.body.token.length > 0) {
+            const { user } = jwt.verify(req.body.token, process.env.TOCKEN_PRIVATE_KEY);
+            const userInfo = await UserInfo.findById({ _id: user });
+            res.status(200).json({user:userInfo,message: `Welcome Back ${userInfo.name}`});
         }
-        next();
-    }catch(err){
-        res.status(500).json({error : "Error In Authentication"});
+        else {
+            next();
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Error In Authentication" });
     }
 }
 

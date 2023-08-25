@@ -11,7 +11,6 @@ router.post("/login", AuthMiddleware, async (req, res) => {
     if (user) {
         if(await bcrypt.compare(password,user.password)){
             const token = jwt.sign({user : user._id}, process.env.TOCKEN_PRIVATE_KEY,{expiresIn: '500s'});
-            console.log(token)
             await UserInfo.findOneAndUpdate({email},{token});
 
             res.status(200).json({user,token,message:"You Logged In Successfully!"});

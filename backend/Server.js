@@ -15,6 +15,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
 // Routes
 app.use(require('./routes/AuthenticationRoutes'));
+app.use(require('./routes/CardRoutes'));
 
 require('dotenv').config()
 const PORT = process.env.PORT || 8000;

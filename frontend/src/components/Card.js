@@ -98,7 +98,6 @@ const Card = () => {
                     val = [...values.paymentRemarks];
                     val.push({ Date: values.paidDate, PaidAmount: values.pendingAmount, fullpaymentDone: true })
                     handleChange([{ name: "paymentRemarks", value: val }, { name: "pendingAmount", value: 0 }])
-
                 }
                 setFormData(values);
                 setViewEdit(false);

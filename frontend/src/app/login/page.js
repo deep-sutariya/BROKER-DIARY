@@ -18,8 +18,8 @@ const page = () => {
         if (EmailValidator(email)) {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, values);
             if(data?.data?.user && data?.data?.token){
-                console.log(data?.data?.token);
-                sessionStorage.setItem("LOGIN_TOKEN",data?.data?.token);
+                console.log(data?.data?.user);
+                localStorage.setItem("LOGIN_TOKEN",data?.data?.token);
                 setErrorMessage("");
                 alert(data?.data?.message);
             }

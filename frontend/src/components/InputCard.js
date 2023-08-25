@@ -2,6 +2,7 @@
 
 import { CheckCardInput } from "@/utils/Validation";
 import useUpdate from "@/utils/useUpdate";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
@@ -29,13 +30,17 @@ const InputCard = ({ setInputCard }) => {
         fullpaymentDone: "",
     });
 
-    const SaveEdit = () => {
+    const SaveEdit = async() => {
         const validationResponse = CheckCardInput(values);
         if (validationResponse === "Success") {
             // SaveCard Axios Request
-            setInputCard(false);
+            const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addcard`, {
+                id: "64e88f87de582a4885401fb5",
+                values,
+            });
+            alert(data?.data?.message);
+            // setInputCard(false);
         }
-        alert(validationResponse)
     }
 
     useEffect(() => {
