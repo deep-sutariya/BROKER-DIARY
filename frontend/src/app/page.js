@@ -1,10 +1,27 @@
 "use client"
 import Card from "@/components/Card";
 import Months from "@/components/Months";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [View, setView] = useState("month");
+
+  const getUserInfo = async(token) => {
+    const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {token});
+    if (data?.data?.user && data?.data?.token) {
+      console.log(data?.data?.token);
+      sessionStorage.setItem("LOGIN_TOKEN", data?.data?.token);
+      alert(data?.data?.message);
+    }
+  }
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("LOGIN_TOKEN");
+    if (token.length > 0) {
+      getUserInfo(token);
+    }
+  }, []);
 
   return (
     <main className="flex flex-col gap-y-6 md:gap-y-8 mt-7 md:mt-14">

@@ -1,6 +1,7 @@
 "use client"
 import { EmailValidator } from "@/utils/Validation";
 import useForm from "@/utils/useForm";
+import axios from "axios";
 import { useState } from "react";
 
 const page = () => {
@@ -10,17 +11,25 @@ const page = () => {
     })
     const [ErrorMessage, setErrorMessage] = useState("");
 
-    const handleLoginSubmit = (e) => {
+    const handleLoginSubmit = async(e) => {
         e.preventDefault();
-        const { email, password } = values;
+        const { email } = values;
 
         if (EmailValidator(email)) {
-
+            const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, values);
+            if(data?.data?.user && data?.data?.token){
+                console.log(data?.data?.token);
+                sessionStorage.setItem("LOGIN_TOKEN",data?.data?.token);
+                setErrorMessage("");
+                alert(data?.data?.message);
+            }
+            else{
+                setErrorMessage(data?.data?.error);
+            }
         }
         else {
             setErrorMessage("Enter valid email!");
         }
-        console.log(values)
     }
     return (
         <div className="flex justify-center items-center rounded-xl h-[70vh] ">
@@ -36,7 +45,7 @@ const page = () => {
                         <input type="password" id="password" placeholder="Enter Password" name="password" value={values.name} onChange={handleChange} required className="sm:text-lg text-base px-3 py-1 md:px-3 md:py-2 w-full rounded-md border-gray-300 focus:outline-none focus:border-brown" />
                     </div>
                     <div>
-                        <p className="text-red-400 font-heading block font-semibold mb-2">{ErrorMessage}</p>
+                        <p className="text-red-700 font-heading block font-semibold mb-2">{ErrorMessage}</p>
                         <button type="submit" className="px-4 text-lg font-heading py-2 w-full transition ease-in-out duration-300 border border-1 border-brown hover:bg-brown">Login</button>
                     </div>
                 </form>

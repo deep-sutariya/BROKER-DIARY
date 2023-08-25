@@ -3,6 +3,9 @@ import { EmailValidator, IsNullValidator, PasswordValidator } from "@/utils/Vali
 import useForm from "@/utils/useForm"
 import { useState } from "react"
 
+import axios from 'axios';
+require('dotenv').config();
+
 const page = () => {
     const { values, handleChange } = useForm({
         fullname: '',
@@ -13,24 +16,33 @@ const page = () => {
 
     const [ErrorMessage, setErrorMessage] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         const { fullname, email, password, cpassword } = values;
 
         if (EmailValidator(email)) {
             if (PasswordValidator(password, cpassword)) {
-                alert("Signup successfully!");
+                const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signup`, {
+                    name: fullname,
+                    email: email,
+                    password: password
+                });
+                if(data?.data?.message){
+                    setErrorMessage("");
+                    alert(data?.data?.message);
+                }
+                else{
+                    setErrorMessage(data?.data?.error);
+                }
             }
             else {
-                setErrorMessage("Enter current password same as password!")
+                setErrorMessage("Current password should match with password!")
             }
         }
         else {
             setErrorMessage("Enter valid email!");
             document.getElementById("email").focus = true;
         }
-
-        console.log(values)
     }
     return (
         <div className="flex justify-center items-center rounded-xl h-[70vh]">
@@ -41,7 +53,7 @@ const page = () => {
                         <div className="flex flex-col gap-y-4 md:w-1/2">
                             <div className="gap-y-2">
                                 <label htmlFor="fullname" className="font-medium text-base md:text-lg text-gray-700">Full Name</label>
-                                <input type="text" id="fullname" placeholder="Enter Name" name="fullname" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
+                                <input type="text" id="fullname" placeholder="Enter Name" autoComplete="on" name="fullname" value={values.name} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-brown" />
                             </div>
                             <div className="gap-y-2">
                                 <label htmlFor="email" className="font-medium text-base md:text-lg text-gray-700">Email</label>
@@ -62,7 +74,7 @@ const page = () => {
 
                     </div>
                     <div>
-                        <p className="text-red-400 font-heading block font-semibold mb-2">{ErrorMessage}</p>
+                        <p className=" text-red-700 text-sm sm:text-base font-heading block font-semibold mb-2">{ErrorMessage}</p>
                         <button type="submit" className="px-4 text-lg font-heading py-2 w-full transition ease-in-out duration-300 border border-1 border-brown hover:bg-brown">Signup</button>
                     </div>
                 </form>
