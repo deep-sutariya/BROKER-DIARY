@@ -4,9 +4,12 @@ import useForm from "@/utils/useForm"
 import { useState } from "react"
 
 import axios from 'axios';
+import { useRouter } from "next/navigation";
 require('dotenv').config();
 
 const page = () => {
+    const router = useRouter();
+
     const { values, handleChange } = useForm({
         fullname: '',
         email: '',
@@ -30,6 +33,7 @@ const page = () => {
                 if(data?.data?.message){
                     setErrorMessage("");
                     alert(data?.data?.message);
+                    router.push("/login");
                 }
                 else{
                     setErrorMessage(data?.data?.error);

@@ -5,8 +5,11 @@ import useUpdate from "@/utils/useUpdate";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTimes } from 'react-icons/fa';
+import { useSelector } from "react-redux";
 
 const InputCard = ({ setInputCard }) => {
+
+    const user = useSelector((state) => state.authReducer);
 
     const { values, handleChange } = useUpdate({
         seller: "",
@@ -30,16 +33,17 @@ const InputCard = ({ setInputCard }) => {
         fullpaymentDone: "",
     });
 
-    const SaveEdit = async() => {
+    const SaveEdit = async () => {
         const validationResponse = CheckCardInput(values);
         if (validationResponse === "Success") {
             // SaveCard Axios Request
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addcard`, {
-                id: "64e88f87de582a4885401fb5",
+                id: user._id,
                 values,
             });
+            
             alert(data?.data?.message);
-            // setInputCard(false);
+            setInputCard(false);
         }
     }
 
@@ -58,7 +62,7 @@ const InputCard = ({ setInputCard }) => {
         if (values.weight > 0 && values.outPercentage > 0) {
             const ow = (values.weight * values.outPercentage) / 100;
             const nw = values.weight - ow;
-            handleChange([{ name: "netWeight", value: nw }, { name: "outWeight", value: ow }]);
+            handleChange([{ name: "netWeight", value: parseFloat(nw.toFixed(7)) }, { name: "outWeight", value: parseFloat(ow.toFixed(7)) }]);
         } else {
             handleChange([{ name: "netWeight", value: "" }, { name: "outWeight", value: "" }])
         }
@@ -67,7 +71,7 @@ const InputCard = ({ setInputCard }) => {
     useEffect(() => {
         if (values.netWeight > 0 && values.price > 0 && values.lessPercentage > 0) {
             const ta = (values.netWeight * values.price) - (values.netWeight * values.lessPercentage);
-            handleChange([{ name: "totalAmount", value: ta }]);
+            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(3)) }]);
         } else {
             handleChange([{ name: "totalAmount", value: "" }]);
         }
@@ -76,7 +80,7 @@ const InputCard = ({ setInputCard }) => {
     useEffect(() => {
         if (values.totalAmount > 0 && values.brokerage > 0) {
             const ba = (values.totalAmount * values.brokerage) / 100;
-            handleChange([{ name: "brokerageAmt", value: ba }]);
+            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(3)) }]);
         } else {
             handleChange([{ name: "brokerageAmt", value: "" }]);
         }
@@ -272,7 +276,7 @@ const InputCard = ({ setInputCard }) => {
                                     name="brokerage"
                                     value={values.brokerage}
                                     onChange={handleChange}
-                                    
+
                                 />
                                 <h1 className="text-gray-600 text-xs sm:text-base">%</h1>
                             </div>

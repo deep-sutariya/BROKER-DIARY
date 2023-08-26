@@ -10,7 +10,7 @@ router.post("/login", AuthMiddleware, async (req, res) => {
     const user = await UserInfo.findOne({ email });
     if (user) {
         if(await bcrypt.compare(password,user.password)){
-            const token = jwt.sign({user : user._id}, process.env.TOCKEN_PRIVATE_KEY,{expiresIn: '500s'});
+            const token = jwt.sign({user : user._id}, process.env.TOCKEN_PRIVATE_KEY,{expiresIn: '30d'});
             await UserInfo.findOneAndUpdate({email},{token});
 
             res.status(200).json({user,token,message:"You Logged In Successfully!"});
@@ -20,7 +20,7 @@ router.post("/login", AuthMiddleware, async (req, res) => {
         }
     }
     else {
-        res.json({ error: "Email Already Exists" });
+        res.json({ error: "User Not Found" });
     }
 });
 

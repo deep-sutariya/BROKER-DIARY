@@ -5,28 +5,28 @@ import useUpdate from "@/utils/useUpdate";
 import { useEffect, useState } from "react";
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 
-const Card = () => {
+const Card = ({formData}) => {
     const [ViewEdit, setViewEdit] = useState(false);
 
-    const [formData, setFormData] = useState({
-        seller: 'John Doe',
-        buyer: 'Jane Smisssssssss',
-        sellingDate: '2023-08-14',
-        dueDate: '2023-08-30',
-        dueDay: '5',
-        weight: '10',
-        outPercentage: '5',
-        outWeight: '0.5',
-        netWeight: '9.5',
-        price: '10',
-        lessPercentage: '2',
-        totalAmount: '76',
-        brokerage: '2',
-        brokerageAmt: '1.52',
-        pendingAmount: '95',
-        paymentRemarks: [],
-        fullpaymentDone: false,
-    });
+    // const [formData, setFormData] = useState({
+    //     seller: 'John Doe',
+    //     buyer: 'Jane Smisssssssss',
+    //     sellingDate: '2023-08-14',
+    //     dueDate: '2023-08-30',
+    //     dueDay: '5',
+    //     weight: '10',
+    //     outPercentage: '5',
+    //     outWeight: '0.5',
+    //     netWeight: '9.5',
+    //     price: '10',
+    //     lessPercentage: '2',
+    //     totalAmount: '76',
+    //     brokerage: '2',
+    //     brokerageAmt: '1.52',
+    //     pendingAmount: '95',
+    //     paymentRemarks: [],
+    //     fullpaymentDone: false,
+    // });
 
     const { values, handleChange } = useUpdate({
         seller: formData.seller,
@@ -99,7 +99,8 @@ const Card = () => {
                     val.push({ Date: values.paidDate, PaidAmount: values.pendingAmount, fullpaymentDone: true })
                     handleChange([{ name: "paymentRemarks", value: val }, { name: "pendingAmount", value: 0 }])
                 }
-                setFormData(values);
+                // Update Data...
+                // setFormData(values);
                 setViewEdit(false);
                 values.paidAmount = "";
             }
@@ -121,24 +122,21 @@ const Card = () => {
     useEffect(() => {
         handleChange([{ name: "pendingAmount", value: values.totalAmount }])
     }, [values.totalAmount])
-
+    
     useEffect(() => {
         const startDate = new Date(values.sellingDate);
         const endDate = new Date(values.dueDate);
-
+        
         const differenceInMillis = endDate - startDate;
         values.dueDay = differenceInMillis / (1000 * 60 * 60 * 24);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            dueDay: values.dueDay.toString(),
-        }));
+        handleChange([{ name: "dueDay", value: values.dueDay.toString() }])
     }, [values.sellingDate, values.dueDate]);
 
     useEffect(() => {
         if (values.weight > 0 && values.outPercentage > 0) {
             const ow = (values.weight * values.outPercentage) / 100;
             const nw = values.weight - ow;
-            handleChange([{ name: "netWeight", value: nw }, { name: "outWeight", value: ow }]);
+            handleChange([{ name: "netWeight", value: parseFloat(nw.toFixed(7)) }, { name: "outWeight", value: parseFloat(ow.toFixed(7)) }]);
         } else {
             handleChange([{ name: "netWeight", value: "" }, { name: "outWeight", value: "" }])
         }
@@ -147,7 +145,7 @@ const Card = () => {
     useEffect(() => {
         if (values.netWeight > 0 && values.price > 0 && values.lessPercentage > 0) {
             const ta = (values.netWeight * values.price) - (values.netWeight * values.lessPercentage);
-            handleChange([{ name: "totalAmount", value: ta }]);
+            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(3)) }]);
         } else {
             handleChange([{ name: "totalAmount", value: "" }]);
         }
@@ -156,7 +154,7 @@ const Card = () => {
     useEffect(() => {
         if (values.totalAmount > 0 && values.brokerage > 0) {
             const ba = (values.totalAmount * values.brokerage) / 100;
-            handleChange([{ name: "brokerageAmt", value: ba }]);
+            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(3)) }]);
         } else {
             handleChange([{ name: "brokerageAmt", value: "" }]);
         }

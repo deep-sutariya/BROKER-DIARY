@@ -1,16 +1,21 @@
 "use client"
 import Card from "@/components/Card";
 import Months from "@/components/Months";
+import { logIn } from "@/redux/features/authSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";  
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
   const [View, setView] = useState("month");
 
+  const user = useSelector((state)=>state.authReducer);
+  const dispach = useDispatch();
+
   const getUserInfo = async(token) => {
     const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {token});
     if (data?.data?.user) {
-      alert(data?.data?.message);
+      dispach(logIn(data?.data?.user));
     }
   }
   
@@ -44,10 +49,12 @@ export default function Home() {
       }
 
       <div className="grid gap-y-4 md:gap-y-8 w-[85%] mx-auto">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {
+          user && Object.keys(user)>0 && user.cards.map((item,ind)=>{
+            console.log("nioij");
+            return <Card key={item._id} cardDetails={item} />
+          })
+        }
       </div>
 
     </main>

@@ -1,29 +1,38 @@
 "use client"
+import { logIn } from "@/redux/features/authSlice";
 import { EmailValidator } from "@/utils/Validation";
 import useForm from "@/utils/useForm";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const page = () => {
+
+    const router = useRouter();
+    const dispach = useDispatch();
+
     const { values, handleChange } = useForm({
         email: '',
         password: '',
     })
     const [ErrorMessage, setErrorMessage] = useState("");
 
-    const handleLoginSubmit = async(e) => {
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
         const { email } = values;
 
         if (EmailValidator(email)) {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, values);
-            if(data?.data?.user && data?.data?.token){
-                console.log(data?.data?.user);
-                localStorage.setItem("LOGIN_TOKEN",data?.data?.token);
+            if (data?.data?.user && data?.data?.token) {
+                localStorage.setItem("LOGIN_TOKEN", data?.data?.token);
                 setErrorMessage("");
+
+                dispach(logIn(data?.data?.user));
+                router.push("/");
                 alert(data?.data?.message);
             }
-            else{
+            else {
                 setErrorMessage(data?.data?.error);
             }
         }
