@@ -1,11 +1,18 @@
 "use client"
 
+import { AddCard } from "@/redux/features/cardSlice";
 import { CheckCardInput } from "@/utils/Validation";
 import useUpdate from "@/utils/useUpdate";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
+import { useDispatch, useSelector } from "react-redux";
 
 const Card = ({formData}) => {
+
+    const user = useSelector(state=>state.authReducer);
+    const dispatch = useDispatch();
+
     const [ViewEdit, setViewEdit] = useState(false);
 
     // const [formData, setFormData] = useState({
@@ -101,6 +108,14 @@ const Card = ({formData}) => {
                 }
                 // Update Data...
                 // setFormData(values);
+
+                
+
+                // const data = axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updatecard`,{
+                //     id: user._id,
+                //     values
+                // })
+                console.log(data?.data);
                 setViewEdit(false);
                 values.paidAmount = "";
             }

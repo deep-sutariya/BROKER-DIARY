@@ -1,15 +1,17 @@
 "use client"
 
+import { logIn } from "@/redux/features/authSlice";
 import { CheckCardInput } from "@/utils/Validation";
 import useUpdate from "@/utils/useUpdate";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaTimes } from 'react-icons/fa';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const InputCard = ({ setInputCard }) => {
 
     const user = useSelector((state) => state.authReducer);
+    const dispatch = useDispatch();
 
     const { values, handleChange } = useUpdate({
         seller: "",
@@ -30,20 +32,33 @@ const InputCard = ({ setInputCard }) => {
         paidDate: "",
         paidAmount: "",
         paymentRemarks: "",
-        fullpaymentDone: "",
+        fullpaymentDone: false,
     });
 
     const SaveEdit = async () => {
         const validationResponse = CheckCardInput(values);
-        if (validationResponse === "Success") {
-            // SaveCard Axios Request
-            const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addcard`, {
-                id: user._id,
-                values,
-            });
+        if (user.cards && validationResponse === "Success") {
             
-            alert(data?.data?.message);
-            setInputCard(false);
+            const updatedUser = {
+                ...user,
+                cards: [values,...user.cards]
+            };
+
+            try {
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addcard`, {
+                    user: updatedUser
+                });
+                
+                if (response?.status === 200 && response?.data?.message) {
+                    alert(response?.data?.message);
+                    dispatch(logIn(updatedUser));
+                    setInputCard(false);
+                } else {
+                    alert(response?.data?.error);
+                }
+            } catch (error) {
+                alert("Error Accured Contact Developer");
+            }
         }
     }
 

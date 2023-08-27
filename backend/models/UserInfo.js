@@ -9,8 +9,8 @@ const UserInfo = new mongoose.Schema({
         {
             seller: { type: String },
             buyer: { type: String },
-            sellingDate: { type: Date },
-            dueDate: { type: Date },
+            sellingDate: { type: String },
+            dueDate: { type: String },
             dueDay: { type: String },
             weight: { type: String },
             outPercentage: { type: String },
@@ -22,11 +22,11 @@ const UserInfo = new mongoose.Schema({
             brokerage: { type: String },
             brokerageAmt: { type: String },
             pendingAmount: { type: String },
-            paidDate: { type: Date },
+            paidDate: { type: String },
             paidAmount: { type: Number },
             paymentRemarks: [
                 {
-                    Date: { type: Date },
+                    Date: { type: String },
                     PaidAmount: { type: Number },
                     fullpaymentDone: { type: Boolean }
                 }

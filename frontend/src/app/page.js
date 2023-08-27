@@ -10,6 +10,11 @@ export default function Home() {
   const [View, setView] = useState("month");
 
   const user = useSelector((state)=>state.authReducer);
+  
+  useEffect(()=>{
+    console.log("Home-->",user);
+  },[user])
+
   const dispach = useDispatch();
 
   const getUserInfo = async(token) => {
@@ -50,9 +55,8 @@ export default function Home() {
 
       <div className="grid gap-y-4 md:gap-y-8 w-[85%] mx-auto">
         {
-          user && Object.keys(user)>0 && user.cards.map((item,ind)=>{
-            console.log("nioij");
-            return <Card key={item._id} cardDetails={item} />
+          user && user?.cards && user.cards.length>0 && user.cards.map((item,ind)=>{
+            return <Card key={ind} formData={item} />
           })
         }
       </div>

@@ -3,16 +3,20 @@ const UserInfo = require('../models/UserInfo');
 const router = require('express').Router();
 
 router.post("/addcard", async(req,res)=>{
-    const { id } = req.body;
-    const user = await UserInfo.findById({_id:id});
-    if(user){
-        const cards = user?.cards;
-        cards.unshift(req.body.values);
-        await UserInfo.findOneAndUpdate({_id:id}, {$set: {cards: cards}} );
+    const {user} = req.body;
+    try{
+        console.log(user.cards);
+        await UserInfo.findOneAndUpdate({ _id: user._id },{ $set: { cards: user.cards } });
         res.status(200).json({message: `Card Added Successfully!`});
-    }else{
-        res.json({error: `User Not Found`});
     }
+    catch(e){
+        res.json({error: `Card Not Added! Try Again`});
+        console.log(e);
+    }
+})
+
+router.post("/updatecard", async(req,res)=>{
+    
 })
 
 module.exports = router
