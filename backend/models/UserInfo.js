@@ -23,11 +23,11 @@ const UserInfo = new mongoose.Schema({
             brokerageAmt: { type: String },
             pendingAmount: { type: String },
             paidDate: { type: String },
-            paidAmount: { type: Number },
+            paidAmount: { type: String },
             paymentRemarks: [
                 {
                     Date: { type: String },
-                    PaidAmount: { type: Number },
+                    PaidAmount: { type: String },
                     fullpaymentDone: { type: Boolean }
                 }
             ],

@@ -31,7 +31,7 @@ const InputCard = ({ setInputCard }) => {
         pendingAmount: "",
         paidDate: "",
         paidAmount: "",
-        paymentRemarks: "",
+        paymentRemarks: [],
         fullpaymentDone: false,
     });
 
@@ -39,19 +39,21 @@ const InputCard = ({ setInputCard }) => {
         const validationResponse = CheckCardInput(values);
         if (user.cards && validationResponse === "Success") {
             
-            const updatedUser = {
-                ...user,
-                cards: [values,...user.cards]
+            const updatedCard = {
+                ...values,
+                pendingAmount: values.totalAmount,
             };
 
+            console.log("Focus-->",updatedCard);
             try {
                 const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addcard`, {
-                    user: updatedUser
+                    user_id: user._id,
+                    values: updatedCard
                 });
                 
                 if (response?.status === 200 && response?.data?.message) {
                     alert(response?.data?.message);
-                    dispatch(logIn(updatedUser));
+                    dispatch(logIn({...user, cards: [updatedCard,...user.cards]}));
                     setInputCard(false);
                 } else {
                     alert(response?.data?.error);
@@ -86,7 +88,7 @@ const InputCard = ({ setInputCard }) => {
     useEffect(() => {
         if (values.netWeight > 0 && values.price > 0 && values.lessPercentage > 0) {
             const ta = (values.netWeight * values.price) - (values.netWeight * values.lessPercentage);
-            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(3)) }]);
+            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(2)) }]);
         } else {
             handleChange([{ name: "totalAmount", value: "" }]);
         }
@@ -95,7 +97,7 @@ const InputCard = ({ setInputCard }) => {
     useEffect(() => {
         if (values.totalAmount > 0 && values.brokerage > 0) {
             const ba = (values.totalAmount * values.brokerage) / 100;
-            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(3)) }]);
+            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(2)) }]);
         } else {
             handleChange([{ name: "brokerageAmt", value: "" }]);
         }

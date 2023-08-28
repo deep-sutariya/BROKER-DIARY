@@ -1,6 +1,6 @@
 "use client"
 
-import { AddCard } from "@/redux/features/cardSlice";
+import { logIn } from "@/redux/features/authSlice";
 import { CheckCardInput } from "@/utils/Validation";
 import useUpdate from "@/utils/useUpdate";
 import axios from "axios";
@@ -8,32 +8,12 @@ import { useEffect, useState } from "react";
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
 
-const Card = ({formData}) => {
+const Card = ({ formData }) => {
 
-    const user = useSelector(state=>state.authReducer);
+    const user = useSelector(state => state.authReducer);
     const dispatch = useDispatch();
-
+    
     const [ViewEdit, setViewEdit] = useState(false);
-
-    // const [formData, setFormData] = useState({
-    //     seller: 'John Doe',
-    //     buyer: 'Jane Smisssssssss',
-    //     sellingDate: '2023-08-14',
-    //     dueDate: '2023-08-30',
-    //     dueDay: '5',
-    //     weight: '10',
-    //     outPercentage: '5',
-    //     outWeight: '0.5',
-    //     netWeight: '9.5',
-    //     price: '10',
-    //     lessPercentage: '2',
-    //     totalAmount: '76',
-    //     brokerage: '2',
-    //     brokerageAmt: '1.52',
-    //     pendingAmount: '95',
-    //     paymentRemarks: [],
-    //     fullpaymentDone: false,
-    // });
 
     const { values, handleChange } = useUpdate({
         seller: formData.seller,
@@ -50,15 +30,14 @@ const Card = ({formData}) => {
         totalAmount: formData.totalAmount,
         brokerage: formData.brokerage,
         brokerageAmt: formData.brokerageAmt,
-        pendingAmount: formData.totalAmount,
+        pendingAmount: formData.pendingAmount,
         paidDate: new Date().toISOString().split('T')[0],
         paidAmount: "",
         paymentRemarks: formData.paymentRemarks,
         fullpaymentDone: formData.fullpaymentDone,
     });
 
-
-    const CancelEdit = () => {
+    const initializeState = () => {
         handleChange([
             { name: 'seller', value: formData.seller },
             { name: 'buyer', value: formData.buyer },
@@ -80,54 +59,113 @@ const Card = ({formData}) => {
             { name: 'paymentRemarks', value: formData.paymentRemarks },
             { name: 'fullpaymentDone', value: formData.fullpaymentDone },
         ]);
-
+    }
+    const CancelEdit = () => {
+        // initializeState();
         setViewEdit(false);
     };
+    const openEdit = () => {
+        initializeState();
+        setViewEdit(true);
+    }
 
+    const SaveEdit = async () => {
+        console.log("From Save-->", user.cards);
+        if (values.pendingAmount < values.paidAmount) {
+            alert("Enter Detail Properly")
+            return;
+        }
 
-    const SaveEdit = () => {
-        if (values.pendingAmount < values.paidAmount) alert("Enter Paid Amount Properly")
-        else {
-            const responseError = CheckCardInput(values);
-            if (responseError === "Success") {
-                let npa, val;
-                if (values.pendingAmount > 0 && values.paidAmount > 0 && values.pendingAmount >= values.paidAmount && values.paidDate) {
-                    npa = values.pendingAmount - values.paidAmount;
-                    val = [...values.paymentRemarks];
-                    val.push({ Date: values.paidDate, PaidAmount: values.paidAmount, fullpaymentDone: false })
-                    if (values.fullpaymentDone) {
-                        val.push({ Date: values.paidDate, PaidAmount: npa, fullpaymentDone: true })
-                        handleChange([{ name: "paymentRemarks", value: val }, { name: "pendingAmount", value: 0 }])
-                    }
-                    else handleChange([{ name: "paymentRemarks", value: val }, { name: "pendingAmount", value: npa }])
-                }
-                else if (values.fullpaymentDone && values.pendingAmount > 0) {
-                    val = [...values.paymentRemarks];
-                    val.push({ Date: values.paidDate, PaidAmount: values.pendingAmount, fullpaymentDone: true })
-                    handleChange([{ name: "paymentRemarks", value: val }, { name: "pendingAmount", value: 0 }])
-                }
-                // Update Data...
-                // setFormData(values);
+        const responseError = CheckCardInput(values);
+        if (responseError !== "Success") {
+            alert(data?.data?.error);
+            return;
+        }
 
-                
+        let npa, val = [...values.paymentRemarks];
+        if (values.pendingAmount > 0 && values.paidAmount > 0 && values.pendingAmount >= values.paidAmount && values.paidDate) {
+            npa = Number(values.pendingAmount) - Number(values.paidAmount);
+            console.log("CardAmount-->", npa.toFixed(2));
 
-                // const data = axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updatecard`,{
-                //     id: user._id,
-                //     values
-                // })
-                console.log(data?.data);
-                setViewEdit(false);
-                values.paidAmount = "";
+            val.push({ Date: values.paidDate, PaidAmount: values.paidAmount, fullpaymentDone: false })
+            if (values.fullpaymentDone) {
+                val.push({ Date: values.paidDate, PaidAmount: toString(npa.toFixed(2)), fullpaymentDone: true })
             }
-            else alert(responseError);
+        }
+        else if (values.fullpaymentDone && values.pendingAmount > 0) {
+            val.push({ Date: values.paidDate, PaidAmount: values.pendingAmount, fullpaymentDone: true })
+        }
+
+        try {
+            handleChange([
+                { name: "paymentRemarks", value: val },
+                { name: "pendingAmount", value: values.fullpaymentDone ? 0 : npa ? npa.toFixed(2) : 0 },
+                { name: "paidAmount", value: "" }
+            ]);
+
+            const updatedData = {
+                ...values,
+                paymentRemarks: val,
+                pendingAmount: values.fullpaymentDone ? 0 : npa ? npa.toFixed(2) : 0,
+                paidAmount: ""
+            };
+
+            const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updatecard`, {
+                userid: user._id,
+                cardid: formData._id,
+                values: updatedData
+            });
+
+            if (data?.status === 200 && data?.data?.message) {
+                alert(data?.data?.message);
+                dispatch(logIn(data?.data?.user));
+                setViewEdit(false);
+                handleChange([{ name: "paidAmount", value: "" }]);
+            } else {
+                alert(data?.data?.error);
+            }
+        } catch (error) {
+            initializeState()
+            alert("Error in updating card!");
         }
     }
 
-    const DeletePaymentEntry = (ind) => {
-        let paidAmount = Number(values.paymentRemarks[ind].PaidAmount);
-        let NewpendingAmount = values.pendingAmount + paidAmount;
-        values.paymentRemarks.splice(ind, 1);
-        handleChange([{ name: "paymentRemarks", value: values.paymentRemarks }, { name: "pendingAmount", value: NewpendingAmount }]);
+
+    const DeletePaymentEntry = async (ind) => {
+        if (confirm("Are you sure")) {
+            const updatedPaymentRemarks = [...values.paymentRemarks];
+            const paidAmount = Number(updatedPaymentRemarks[ind].PaidAmount);
+            const newPendingAmount = Number(values.pendingAmount) + paidAmount;
+            updatedPaymentRemarks.splice(ind, 1);
+
+            try {
+                handleChange([
+                    { name: "paymentRemarks", value: updatedPaymentRemarks },
+                    { name: "pendingAmount", value: newPendingAmount.toFixed(2) }
+                ]);
+
+                const updatedData = {
+                    ...values,
+                    paymentRemarks: updatedPaymentRemarks,
+                    pendingAmount: newPendingAmount.toFixed(2)
+                };
+
+                const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updatecard`, {
+                    userid: user._id,
+                    cardid: formData._id,
+                    values: updatedData
+                });
+
+                if (data?.status === 200 && data?.data?.message) {
+                    alert(data?.data?.message);
+                    dispatch(logIn(data?.data?.user));
+                } else {
+                    alert(data?.data?.error);
+                }
+            } catch (error) {
+                alert("Error in Deleting entry!");
+            }
+        }
     }
 
     const checkBoxHandler = () => {
@@ -135,13 +173,20 @@ const Card = ({formData}) => {
     }
 
     useEffect(() => {
-        handleChange([{ name: "pendingAmount", value: values.totalAmount }])
-    }, [values.totalAmount])
-    
+        let ta = Number(values.totalAmount);
+        let pd = [...values.paymentRemarks];
+        let tp = 0;
+        pd.forEach(element => {
+            tp += Number(element.PaidAmount);
+        });
+        let pendingAmount = ta - tp;
+        handleChange([{ name: "pendingAmount", value: parseFloat(pendingAmount.toFixed(2)) }])
+    }, [values.paymentRemarks, values.totalAmount])
+
     useEffect(() => {
         const startDate = new Date(values.sellingDate);
         const endDate = new Date(values.dueDate);
-        
+
         const differenceInMillis = endDate - startDate;
         values.dueDay = differenceInMillis / (1000 * 60 * 60 * 24);
         handleChange([{ name: "dueDay", value: values.dueDay.toString() }])
@@ -160,7 +205,7 @@ const Card = ({formData}) => {
     useEffect(() => {
         if (values.netWeight > 0 && values.price > 0 && values.lessPercentage > 0) {
             const ta = (values.netWeight * values.price) - (values.netWeight * values.lessPercentage);
-            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(3)) }]);
+            handleChange([{ name: "totalAmount", value: parseFloat(ta.toFixed(2)) }]);
         } else {
             handleChange([{ name: "totalAmount", value: "" }]);
         }
@@ -169,7 +214,7 @@ const Card = ({formData}) => {
     useEffect(() => {
         if (values.totalAmount > 0 && values.brokerage > 0) {
             const ba = (values.totalAmount * values.brokerage) / 100;
-            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(3)) }]);
+            handleChange([{ name: "brokerageAmt", value: parseFloat(ba.toFixed(2)) }]);
         } else {
             handleChange([{ name: "brokerageAmt", value: "" }]);
         }
@@ -217,7 +262,7 @@ const Card = ({formData}) => {
                                 <div className="flex gap-x-1 sm:gap-x-2 w-full items-center">
                                     <h1 className="text-gray-600 text-xs sm:text-base">Pending Amount:</h1>
                                     <div className=" flex gap-x-2 items-center">
-                                        <h1 className="font-extrabold font-heading sm:tracking-wider text-red-700 text-xs sm:text-base">{values.pendingAmount}</h1>
+                                        <h1 className="font-extrabold font-heading sm:tracking-wider text-red-700 text-xs sm:text-base">{formData.pendingAmount}</h1>
                                         <h1 className="text-gray-600 text-xs sm:text-base">₹</h1>
                                     </div>
                                 </div>
@@ -229,7 +274,7 @@ const Card = ({formData}) => {
                             ViewEdit ?
                                 <FaTimes className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={CancelEdit} />
                                 :
-                                <FaEdit className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={() => setViewEdit(true)} />
+                                <FaEdit className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={openEdit} />
                         }
                     </div>
                 </div>
@@ -503,16 +548,18 @@ const Card = ({formData}) => {
                             </div>
                             <div className="flex flex-col gap-x-2">
                                 <h1 className="text-gray-600 text-xs sm:text-base">Payment Details:</h1>
-                                <div className="flex flex-col gap-y-2 p-3 bg-slate-50 max-h-40 overflow-y-scroll rounded-md">
-                                    {
-                                        values.paymentRemarks.length > 0 &&
-                                        values.paymentRemarks.map((ele, ind) => {
-                                            return <div key={ind} className="flex items-center gap-x-2">
-                                                <h1 className="text-xs sm:text-base w-full">({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
-                                                <FaTrash className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer opacity-70" onClick={() => DeletePaymentEntry(ind)} />
-                                            </div>
-                                        })
-                                    }
+                                <div className="p-3 bg-slate-50 max-h-40 overflow-y-scroll month-scroll rounded-md">
+                                    <div className="my-1 flex flex-col gap-y-2">
+                                        {
+                                            values.paymentRemarks.length > 0 &&
+                                            values.paymentRemarks.map((ele, ind) => {
+                                                return <div key={ind} className="flex items-center gap-x-2 ">
+                                                    <h1 className="text-xs sm:text-base w-full">({ind + 1}) Date: {ele.Date}, Paid Amount: {ele.PaidAmount} {ele.fullpaymentDone ? `(Full Payment)` : ``}</h1>
+                                                    <FaTrash className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer opacity-70" onClick={() => DeletePaymentEntry(ind)} />
+                                                </div>
+                                            })
+                                        }
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex gap-x-2 items-center">

@@ -2,12 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-const Months = () => {
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
-    let date = new Date();
-    let month = date.getMonth();
-    const [selected, setSelected] = useState(month);
-
+const Months = ({selected,setSelected}) => {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
   return (
     <div className="flex gap-x-2 md:gap-x-4 mx-auto justify-start">
         {

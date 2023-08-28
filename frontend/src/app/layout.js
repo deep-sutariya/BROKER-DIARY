@@ -23,11 +23,11 @@ export default function RootLayout({ children }) {
   }, [inputCard])
   return (
     <html lang="en">
-      <body id='body' className='bg-offwhite sm:w-[85%] mx-auto font-basic '>
+      <body id='body' className='bg-offwhite sm:w-[85%] h-[100vh] mx-auto font-basic '>
         <ReduxProvider>
             {
-              inputCard ? <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="w-[85%] mx-auto shadow-lg">
+              inputCard ? <div className="fixed inset-0 mb-32 sm:mb-0 flex items-center justify-center z-50">
+                <div className="w-[90%] sm:w-[85%] mx-auto shadow-lg">
                   <InputCard setInputCard={setInputCard} />
                 </div>
               </div>
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
               <h1 className="text-xl md:text-3xl font-bold text-common">+</h1>
             </div>
 
-            <div id='content' className='content'>
+            <div id='content' className='flex flex-col w-full mx-auto h-[100vh]'>
               <Navbar />
               {children}
               <Footer />

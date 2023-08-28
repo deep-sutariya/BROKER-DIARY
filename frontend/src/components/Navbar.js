@@ -17,17 +17,17 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex shadow-lg flex-row justify-between mb-6 sm:mb-6 sm:mt-6 mx-auto py-4 px-5 lg:py-7 lg:px-20 md:py-5 md:px-10 bg-brown items-center sm:rounded-t-xl">
+    <div className="flex shadow-lg flex-row justify-between mb-6 sm:mb-6 sm:mt-6 mx-auto py-4 px-5 lg:py-7 lg:px-20 md:py-5 md:px-10 bg-brown items-center sm:rounded-t-xl w-full">
       <div className="flex">
         <Link href="/" className="cursor-pointer font-bold tracking-wide hover:scale-105 duration-150 text-2xl sm:text-3xl lg:text-5xl md:text-4xl font-300 sm:tracking-wide text-blue font-rare">
-          Brocker Diary
+          Broker Diary
         </Link>
       </div>
 
 
       <div className="flex flex-row justify-between items-center">
         {
-          user && Object.keys(user).length > 0 ?
+          user.name && Object.keys(user).length > 0 ?
 
             <div className="flex gap-x-4 md:gap-x-6 lg:gap-x-8 items-center" >
               <div className="flex hover:scale-110 duration-150 gap-x-1 md:gap-x-2 items-center justify-center cursor-pointer ">
