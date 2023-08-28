@@ -12,7 +12,7 @@ const Card = ({ formData }) => {
 
     const user = useSelector(state => state.authReducer);
     const dispatch = useDispatch();
-    
+
     const [ViewEdit, setViewEdit] = useState(false);
 
     const { values, handleChange } = useUpdate({
@@ -35,6 +35,7 @@ const Card = ({ formData }) => {
         paidAmount: "",
         paymentRemarks: formData.paymentRemarks,
         fullpaymentDone: formData.fullpaymentDone,
+        brokerpaymentDone: formData.brokerpaymentDone,
     });
 
     const initializeState = () => {
@@ -58,6 +59,7 @@ const Card = ({ formData }) => {
             { name: 'paidAmount', value: "" },
             { name: 'paymentRemarks', value: formData.paymentRemarks },
             { name: 'fullpaymentDone', value: formData.fullpaymentDone },
+            { name: 'brokerpaymentDone', value: formData.brokerpaymentDone },
         ]);
     }
     const CancelEdit = () => {
@@ -70,7 +72,6 @@ const Card = ({ formData }) => {
     }
 
     const SaveEdit = async () => {
-        console.log("From Save-->", user.cards);
         if (values.pendingAmount < values.paidAmount) {
             alert("Enter Detail Properly")
             return;
@@ -130,7 +131,6 @@ const Card = ({ formData }) => {
         }
     }
 
-
     const DeletePaymentEntry = async (ind) => {
         if (confirm("Are you sure")) {
             const updatedPaymentRemarks = [...values.paymentRemarks];
@@ -169,7 +169,9 @@ const Card = ({ formData }) => {
     }
 
     const checkBoxHandler = () => {
-        handleChange([{ name: "fullpaymentDone", value: document.getElementById("fullpaymentDoneCheckBox").checked }]);
+        let fpd = document.getElementById("fullpaymentDoneCheckBox").checked
+        let bpd = document.getElementById("brokerpaymentDoneCheckBox").checked
+        handleChange([{ name: "fullpaymentDone", value: fpd},{ name: "brokerpaymentDone", value: fpd ? bpd : false }]);
     }
 
     useEffect(() => {
@@ -222,7 +224,7 @@ const Card = ({ formData }) => {
 
     return (
         <div>
-            <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone === true ? `border-green-500` : `border-red-500`}`}></div>
+            <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone===true && formData.brokerpaymentDone===true? `border-green-500` : formData.fullpaymentDone===true && formData.brokerpaymentDone===false ? `border-purple-500` :  `border-red-500` }`}></div>
 
             <div className="rounded-b-lg bg-common shadow-md py-2 px-2 md:py-3 md:px-4">
                 <div className="m-2 flex justify-between gap-x-10">
@@ -568,10 +570,23 @@ const Card = ({ formData }) => {
                                     id="fullpaymentDoneCheckBox"
                                     type="checkbox"
                                     name="fullpaymentDone"
+                                    value={values.fullpaymentDone}
                                     checked={values.fullpaymentDone}
                                     onChange={checkBoxHandler}
                                 />
                                 <h1 className="text-gray-600 text-xs sm:text-base">Full Payment Done</h1>
+                            </div>
+                            <div className="flex gap-x-2 items-center">
+                                <input
+                                    className="px-3 py-1 rounded-md focus:outline-none"
+                                    id="brokerpaymentDoneCheckBox"
+                                    type="checkbox"
+                                    name="brokerpaymentDone"
+                                    value={values.brokerpaymentDone}
+                                    checked={values.brokerpaymentDone}
+                                    onChange={checkBoxHandler}
+                                />
+                                <h1 className="text-gray-600 text-xs sm:text-base">Broker Payment Done</h1>
                             </div>
                         </div>
                         :

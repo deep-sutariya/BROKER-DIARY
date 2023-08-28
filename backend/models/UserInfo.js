@@ -32,6 +32,7 @@ const UserInfo = new mongoose.Schema({
                 }
             ],
             fullpaymentDone: { type: Boolean },
+            brokerpaymentDone: { type: Boolean },
         }
     ],
 }, { timestamps: true })

@@ -20,36 +20,41 @@ export default function Home() {
 
   const [sortOption, setSortOption] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [monthlyBrokrage, setMonthlyBrokrage] = useState(0);
 
   const sortedCards = useMemo(() => {
-    let sortedCards;
-    if (user && user.cards && user.cards.length > 0) {
-      sortedCards = [...user.cards];
+    let sortedCards = [...user.cards];
 
-      sortedCards.sort((a, b) => {
-        if (a.fullpaymentDone === b.fullpaymentDone) {
-          switch (sortOption) {
-            case 'date':
-              return sortOrder === 'asc' ? new Date(a.sellingDate) - new Date(b.sellingDate) : new Date(b.sellingDate) - new Date(a.sellingDate);
-            case 'pendingAmount':
-              return sortOrder === 'asc' ? a.pendingAmount - b.pendingAmount : b.pendingAmount - a.pendingAmount;
-            case 'dueDay':
-              return sortOrder === 'asc' ? a.dueDay - b.dueDay : b.dueDay - a.dueDay;
-            case 'totalAmount':
-              return sortOrder === 'asc' ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
-            default:
-              return 0;
-          }
-        } else {
+    sortedCards.sort((a, b) => {
+      switch (sortOption) {
+        case 'date':
+          return sortOrder === 'asc' ? new Date(a.sellingDate) - new Date(b.sellingDate) : new Date(b.sellingDate) - new Date(a.sellingDate);
+        case 'pendingAmount':
+          return sortOrder === 'asc' ? a.pendingAmount - b.pendingAmount : b.pendingAmount - a.pendingAmount;
+        case 'dueDay':
+          return sortOrder === 'asc' ? a.dueDay - b.dueDay : b.dueDay - a.dueDay;
+        case 'totalAmount':
+          return sortOrder === 'asc' ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
+        case 'fullpaid':
+          return a.fullpaymentDone && a.brokerpaymentDone ? -1 : 1;
+        case 'brokerage':
+          return a.fullpaymentDone && !a.brokerpaymentDone ? -1 : 1;
+        case 'notpaid':
           return a.fullpaymentDone ? 1 : -1;
-        }
-      });
-    }
+        default:
+          return 0;
+      }
+    });
+
     return sortedCards;
   }, [user.cards, sortOption, sortOrder]);
 
+  const areCardsAvailableForMonth = (cards, targetMonth) => {
+    return cards.some(item => new Date(item.sellingDate).getMonth() === targetMonth);
+  };
+
   useEffect(() => {
-    if (user && user.cards && user.cards.length>0 && areCardsAvailableForMonth(user.cards, selectedMonth) === false) {
+    if (user && user.cards && user.cards.length > 0 && areCardsAvailableForMonth(user.cards, selectedMonth) === false) {
       setSelectedMessage("No cards available.");
     } else {
       setSelectedMessage("");
@@ -70,13 +75,20 @@ export default function Home() {
     }
   }, []);
 
-  const areCardsAvailableForMonth = (cards, targetMonth) => {
-    return cards.some(item => new Date(item.sellingDate).getMonth() === targetMonth);
-  };
+  useEffect(() => {
+    let totalBrokrage = 0;
+    user && user.cards && user.cards.length > 0 && user.cards.forEach(element => {
+      if (viewOption === "all") totalBrokrage += Number(element.brokerageAmt);
+      else if (new Date(element.sellingDate).getMonth() === selectedMonth) {
+        totalBrokrage += Number(element.brokerageAmt);
+      }
+    });
+    setMonthlyBrokrage(totalBrokrage);
+  }, [user.cards, sortedCards, selectedMonth, viewOption])
 
   return (
     <main className="flex flex-col gap-y-6 md:gap-y-8 mt-7 md:mt-14">
-      
+
       <div className="mx-auto">
         <h1 className='font-heading font-semibold underline text-base md:text-2xl text-blue'>Selling Information</h1>
       </div>
@@ -97,6 +109,16 @@ export default function Home() {
 
       <div className="flex justify-center">
         <SortButtonWraper sortOption={sortOption} setSortOption={setSortOption} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+      </div>
+
+
+      <div className="w-[85%] mx-auto">
+        {
+          viewOption === "month" ?
+            <p className="font-heading float-right text-xs sm:text-base">Monthly brokerage: <span className="font-extrabold sm:tracking-wider text-red-700">{monthlyBrokrage}</span> ₹</p>
+            :
+            <p className="font-heading float-right text-xs sm:text-base">Yearly brokerage: <span className="font-extrabold sm:tracking-wider text-red-700">{monthlyBrokrage}</span> ₹</p>
+        }
       </div>
 
       <div className="grid gap-y-4 md:gap-y-8 w-[85%] mx-auto mb-10 sm:mb-20">

@@ -33,6 +33,7 @@ const InputCard = ({ setInputCard }) => {
         paidAmount: "",
         paymentRemarks: [],
         fullpaymentDone: false,
+        brokerpaymentDone: false,
     });
 
     const SaveEdit = async () => {
