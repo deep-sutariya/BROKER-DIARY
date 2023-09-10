@@ -11,14 +11,14 @@ require('./db/config')();
 
 // Cors Setup
 const cors = require('cors');
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(cors());
 
 // Routes
 app.use(require('./routes/AuthenticationRoutes'));
 app.use(require('./routes/CardRoutes'));
 
 require('dotenv').config()
-const PORT = process.env.PORT || 8000;
+const PORT = 5000;
 
 app.listen(PORT,()=>{
     console.log("Listening on " + PORT);

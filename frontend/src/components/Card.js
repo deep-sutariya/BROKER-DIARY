@@ -7,13 +7,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Card = ({ formData }) => {
-
     const user = useSelector(state => state.authReducer);
     const dispatch = useDispatch();
 
     const [ViewEdit, setViewEdit] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { values, handleChange } = useUpdate({
         seller: formData.seller,
@@ -86,11 +87,10 @@ const Card = ({ formData }) => {
         let npa, val = [...values.paymentRemarks];
         if (values.pendingAmount > 0 && values.paidAmount > 0 && values.pendingAmount >= values.paidAmount && values.paidDate) {
             npa = Number(values.pendingAmount) - Number(values.paidAmount);
-            console.log("CardAmount-->", npa.toFixed(2));
 
             val.push({ Date: values.paidDate, PaidAmount: values.paidAmount, fullpaymentDone: false })
             if (values.fullpaymentDone) {
-                val.push({ Date: values.paidDate, PaidAmount: toString(npa.toFixed(2)), fullpaymentDone: true })
+                val.push({ Date: values.paidDate, PaidAmount: npa.toFixed(2), fullpaymentDone: true })
             }
         }
         else if (values.fullpaymentDone && values.pendingAmount > 0) {
@@ -98,16 +98,17 @@ const Card = ({ formData }) => {
         }
 
         try {
+            setIsLoading(true);
             handleChange([
                 { name: "paymentRemarks", value: val },
-                { name: "pendingAmount", value: values.fullpaymentDone ? 0 : npa ? npa.toFixed(2) : 0 },
+                { name: "pendingAmount", value: values.fullpaymentDone ? 0 : npa !== undefined ? npa.toFixed(2) : values.pendingAmount },
                 { name: "paidAmount", value: "" }
             ]);
 
             const updatedData = {
                 ...values,
                 paymentRemarks: val,
-                pendingAmount: values.fullpaymentDone ? 0 : npa ? npa.toFixed(2) : 0,
+                pendingAmount: values.fullpaymentDone === true ? 0 : npa !== undefined ? npa.toFixed(2) : values.pendingAmount,
                 paidAmount: ""
             };
 
@@ -128,6 +129,8 @@ const Card = ({ formData }) => {
         } catch (error) {
             initializeState()
             alert("Error in updating card!");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -139,15 +142,20 @@ const Card = ({ formData }) => {
             updatedPaymentRemarks.splice(ind, 1);
 
             try {
+                setIsLoading(true);
                 handleChange([
                     { name: "paymentRemarks", value: updatedPaymentRemarks },
-                    { name: "pendingAmount", value: newPendingAmount.toFixed(2) }
+                    { name: "pendingAmount", value: newPendingAmount.toFixed(2) },
+                    { name: "fullpaymentDone", value: false },
+                    { name: "brokerpaymentDone", value: false }
                 ]);
 
                 const updatedData = {
                     ...values,
                     paymentRemarks: updatedPaymentRemarks,
-                    pendingAmount: newPendingAmount.toFixed(2)
+                    pendingAmount: newPendingAmount.toFixed(2),
+                    fullpaymentDone: false,
+                    brokerpaymentDone: false
                 };
 
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updatecard`, {
@@ -159,11 +167,14 @@ const Card = ({ formData }) => {
                 if (data?.status === 200 && data?.data?.message) {
                     alert(data?.data?.message);
                     dispatch(logIn(data?.data?.user));
+                    CancelEdit();
                 } else {
                     alert(data?.data?.error);
                 }
             } catch (error) {
                 alert("Error in Deleting entry!");
+            } finally {
+                setIsLoading(false);
             }
         }
     }
@@ -171,7 +182,7 @@ const Card = ({ formData }) => {
     const checkBoxHandler = () => {
         let fpd = document.getElementById("fullpaymentDoneCheckBox").checked
         let bpd = document.getElementById("brokerpaymentDoneCheckBox").checked
-        handleChange([{ name: "fullpaymentDone", value: fpd},{ name: "brokerpaymentDone", value: fpd ? bpd : false }]);
+        handleChange([{ name: "fullpaymentDone", value: fpd }, { name: "brokerpaymentDone", value: fpd ? bpd : false }]);
     }
 
     useEffect(() => {
@@ -224,9 +235,19 @@ const Card = ({ formData }) => {
 
     return (
         <div>
-            <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone===true && formData.brokerpaymentDone===true? `border-green-500` : formData.fullpaymentDone===true && formData.brokerpaymentDone===false ? `border-purple-500` :  `border-red-500` }`}></div>
-
+            <div className={`rounded-t-lg flex flex-col border-t-4 ${formData.fullpaymentDone === true && formData.brokerpaymentDone === true ? `border-green-500` : formData.fullpaymentDone === true && formData.brokerpaymentDone === false ? `border-purple-500` : `border-red-500`}`}></div>
             <div className="rounded-b-lg bg-common shadow-md py-2 px-2 md:py-3 md:px-4">
+                <div className="m-2 flex justify-between gap-x-10">
+                    <div className="text-xs sm:text-base">({formData.counter})</div>
+                    <div className="cursor-pointer" >
+                        {
+                            ViewEdit ?
+                                <FaTimes className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={CancelEdit} />
+                                :
+                                <FaEdit className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={openEdit} />
+                        }
+                    </div>
+                </div>
                 <div className="m-2 flex justify-between gap-x-10">
                     <div className="flex flex-col justify-between gap-y-2 w-full">
                         <div className="flex gap-x-1 sm:gap-x-2 items-center">
@@ -271,14 +292,7 @@ const Card = ({ formData }) => {
                                 : <></>
                         }
                     </div>
-                    <div className="cursor-pointer" >
-                        {
-                            ViewEdit ?
-                                <FaTimes className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={CancelEdit} />
-                                :
-                                <FaEdit className="w-4 h-4 md:w-5 md:h-5 opacity-60" onClick={openEdit} />
-                        }
-                    </div>
+
                 </div>
 
                 <div className="m-2 flex justify-between border-t-2 border-brown pt-2 sm:pt-3 gap-x-1 md:gap-x-5 lg:gap-x-10">
@@ -596,7 +610,13 @@ const Card = ({ formData }) => {
                 {
                     ViewEdit ?
                         <div className="m-2 mt-4 flex gap-x-3 sm:gap-x-6 cursor-pointer sm:w-1/2">
-                            <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>Save</div>
+                            <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={SaveEdit}>
+                                {isLoading ? (
+                                    <LoadingSpinner color="common" />
+                                ) : (
+                                    "Save"
+                                )}
+                            </div>
                             <div className="px-1 py-2 sm:px-2 rounded-lg text-common text-base sm:text-xl tracking-wider text-center bg-blue w-full" onClick={CancelEdit}>Cancel</div>
                         </div>
                         :

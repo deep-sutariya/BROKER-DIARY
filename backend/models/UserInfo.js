@@ -33,6 +33,7 @@ const UserInfo = new mongoose.Schema({
             ],
             fullpaymentDone: { type: Boolean },
             brokerpaymentDone: { type: Boolean },
+            counter: { type: Number, default: 1 },
         }
     ],
 }, { timestamps: true })

@@ -1,9 +1,11 @@
-const UserInfo = require('../models/UserInfo');
-
 const router = require('express').Router();
 
-router.post("/addcard", async (req, res) => {
-    const { user_id, values } = req.body;
+const UserInfo = require('../models/UserInfo');
+const CounterInfo = require("../models/CounterInfo")
+const autoIncrementNumberId = require('../middleware/AutoIncrementId');
+
+router.post("/addcard", autoIncrementNumberId, async (req, res) => {
+    const { user_id, email, values } = req.body;
     try {
         const user = await UserInfo.findById(user_id);
         if (user) {
@@ -15,23 +17,21 @@ router.post("/addcard", async (req, res) => {
                 }
             });
             if (response)
-                res.status(200).json({ message: `Card Added Successfully!` });
+                res.status(200).json({ message: `Card Added Successfully!`, counter: values.counter });
         }
     }
     catch (e) {
         res.json({ error: `Card Not Added! Try Again` });
-        console.log(e);
     }
 })
 
 router.post("/updatecard", async (req, res) => {
     const { userid, cardid, values } = req.body;
-    console.log("Values--->", values);
-    
     const updated = await UserInfo.findOneAndUpdate({ _id: userid, 'cards._id': cardid },
+        {$set: { 'cards.$': values }},
         { returnOriginal: false }
     );
-
+    
     if (updated && Object.keys(updated).length > 0) {
         res.status(200).json({ user: updated, message: `Card Updated Successfully!` });
     }

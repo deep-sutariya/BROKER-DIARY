@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const AuthMiddleware = require('../middleware/AuthMiddleware');
 const HashPassword = require('../middleware/HashPassword');
+const CounterInfo = require("../models/CounterInfo")
 const UserInfo = require('../models/UserInfo')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
@@ -32,7 +33,10 @@ router.post("/signup", HashPassword, async (req, res) => {
     else {
         const user = new UserInfo(req.body);
         await user.save();
-
+        
+        const counter = new CounterInfo({email});
+        await counter.save();
+        
         res.status(200).json({ message: "You are Registered Successfully!" });
     }
 });

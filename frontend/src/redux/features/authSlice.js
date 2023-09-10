@@ -15,13 +15,8 @@ export const auth = createSlice({
         logIn: (state, action) => {
             return action.payload;
         },
-
-        RemoveCard: (state, action) => {
-            state.cards.splice(action.payload.index, 1);
-            console.log("From slice",state.cards);
-        }
     }
 })
 
-export const { logOut, logIn, UpdateUser,RemoveCard } = auth.actions;
+export const { logOut, logIn, UpdateUser } = auth.actions;
 export default auth.reducer;

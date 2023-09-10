@@ -1,5 +1,6 @@
 "use client"
 import Card from "@/components/Card";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Months from "@/components/Months";
 import SortButtonWraper from "@/components/SortButtonWraper";
 import { logIn } from "@/redux/features/authSlice";
@@ -9,43 +10,47 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
   const [viewOption, setviewOption] = useState("month");
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector((state) => state.authReducer);
   const dispach = useDispatch();
-
-  let date = new Date();
-  let month = date.getMonth();
-  const [selectedMonth, setSelectedMonth] = useState(month);
-  const [selectedMessage, setSelectedMessage] = useState("");
 
   const [sortOption, setSortOption] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [monthlyBrokrage, setMonthlyBrokrage] = useState(0);
 
+  const [selectedMonth, setSelectedMonth] = useState();
+  const [selectedMessage, setSelectedMessage] = useState("");
+
+  useEffect(() => {
+    setSelectedMonth(new Date().getMonth());
+  }, [new Date().getMonth()])
+
   const sortedCards = useMemo(() => {
-    let sortedCards = [...user.cards];
-
-    sortedCards.sort((a, b) => {
-      switch (sortOption) {
-        case 'date':
-          return sortOrder === 'asc' ? new Date(a.sellingDate) - new Date(b.sellingDate) : new Date(b.sellingDate) - new Date(a.sellingDate);
-        case 'pendingAmount':
-          return sortOrder === 'asc' ? a.pendingAmount - b.pendingAmount : b.pendingAmount - a.pendingAmount;
-        case 'dueDay':
-          return sortOrder === 'asc' ? a.dueDay - b.dueDay : b.dueDay - a.dueDay;
-        case 'totalAmount':
-          return sortOrder === 'asc' ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
-        case 'fullpaid':
-          return a.fullpaymentDone && a.brokerpaymentDone ? -1 : 1;
-        case 'brokerage':
-          return a.fullpaymentDone && !a.brokerpaymentDone ? -1 : 1;
-        case 'notpaid':
-          return a.fullpaymentDone ? 1 : -1;
-        default:
-          return 0;
-      }
-    });
-
+    let sortedCards;
+    if (user && user.cards && user.cards.length > 0) {
+      sortedCards = [...user.cards];
+      sortedCards.sort((a, b) => {
+        switch (sortOption) {
+          case 'date':
+            return sortOrder === 'asc' ? new Date(a.sellingDate) - new Date(b.sellingDate) : new Date(b.sellingDate) - new Date(a.sellingDate);
+          case 'pendingAmount':
+            return sortOrder === 'asc' ? a.pendingAmount - b.pendingAmount : b.pendingAmount - a.pendingAmount;
+          case 'dueDay':
+            return sortOrder === 'asc' ? a.dueDay - b.dueDay : b.dueDay - a.dueDay;
+          case 'totalAmount':
+            return sortOrder === 'asc' ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
+          case 'fullpaid':
+            return a.fullpaymentDone && a.brokerpaymentDone ? -1 : 1;
+          case 'brokerage':
+            return a.fullpaymentDone && !a.brokerpaymentDone ? -1 : 1;
+          case 'notpaid':
+            return a.fullpaymentDone ? 1 : -1;
+          default:
+            return 0;
+        }
+      });
+    }
     return sortedCards;
   }, [user.cards, sortOption, sortOrder]);
 
@@ -54,17 +59,34 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (user && user.cards && user.cards.length > 0 && areCardsAvailableForMonth(user.cards, selectedMonth) === false) {
-      setSelectedMessage("No cards available.");
-    } else {
-      setSelectedMessage("");
+    if(user && user._id){
+      if(user.cards && user.cards.length>0){
+        if(areCardsAvailableForMonth(user.cards, selectedMonth) === true){
+          setSelectedMessage("");
+        }
+        else
+          setSelectedMessage("No cards available.");
+      }
+      else 
+        setSelectedMessage("Add Cards.");
     }
-  }, [user.cards, selectedMonth]);
+    else{
+      setSelectedMessage("You have to Login First.");
+    }
+
+  }, [user, selectedMonth]);
 
   const getUserInfo = async (token) => {
-    const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, { token });
-    if (data?.data?.user) {
-      dispach(logIn(data?.data?.user));
+    setIsLoading(true);
+    try {
+      const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, { token });
+      if (data?.data?.user) {
+        dispach(logIn(data?.data?.user));
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -83,7 +105,7 @@ export default function Home() {
         totalBrokrage += Number(element.brokerageAmt);
       }
     });
-    setMonthlyBrokrage(totalBrokrage);
+    setMonthlyBrokrage(parseFloat(totalBrokrage.toFixed(2)));
   }, [user.cards, sortedCards, selectedMonth, viewOption])
 
   return (
@@ -121,21 +143,26 @@ export default function Home() {
         }
       </div>
 
-      <div className="grid gap-y-4 md:gap-y-8 w-[85%] mx-auto mb-10 sm:mb-20">
-        {sortedCards && sortedCards.length > 0 && (
-          sortedCards
-            .filter(item => {
-              const sellingDate = new Date(item.sellingDate);
-              const cardMonth = sellingDate.getMonth();
-              return viewOption === "all" || cardMonth === selectedMonth;
-            })
-            .map((item, ind) => (
-              <Card key={ind} formData={item} />
-            ))
-        )}
+      <div className="grid gap-y-4 md:gap-y-8 w-[90%] sm:w-[85%] mx-auto mb-10 sm:mb-20">
+        {isLoading ? (
+          <LoadingSpinner color="brown" />
+        )
+          :
+          (sortedCards && sortedCards.length > 0 && (
+            sortedCards
+              .filter(item => {
+                const sellingDate = new Date(item.sellingDate);
+                const cardMonth = sellingDate.getMonth();
+                return viewOption === "all" || cardMonth === selectedMonth;
+              })
+              .map((item, ind) => (
+                <Card key={ind} formData={item} />
+              ))
+          ))
 
+        }
         {
-          viewOption === 'month' && sortedCards && sortedCards.length > 0 && selectedMessage.length > 0 && <p className="text-center text-gray-600">{selectedMessage}</p>
+          viewOption === 'month' && <p className="text-center text-gray-600">{selectedMessage}</p>
         }
         {
           viewOption === 'all' && sortedCards && sortedCards.length === 0 && (
