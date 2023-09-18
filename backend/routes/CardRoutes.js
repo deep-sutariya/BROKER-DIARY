@@ -16,8 +16,9 @@ router.post("/addcard", autoIncrementNumberId, async (req, res) => {
                     cards: cards,
                 }
             });
-            if (response)
-                res.status(200).json({ message: `Card Added Successfully!`, counter: values.counter });
+            const userupdated = await UserInfo.findById(user_id);
+            if (response && userupdated)
+                res.status(200).json({ data:userupdated.cards, message: `Card Added Successfully!`, counter: values.counter });
         }
     }
     catch (e) {
@@ -31,7 +32,6 @@ router.post("/updatecard", async (req, res) => {
         {$set: { 'cards.$': values }},
         { returnOriginal: false }
     );
-    
     if (updated && Object.keys(updated).length > 0) {
         res.status(200).json({ user: updated, message: `Card Updated Successfully!` });
     }
